@@ -6,9 +6,7 @@ import './index.css'
 import './../node_modules/bootstrap/dist/css/bootstrap.min.css'
 
 ReactDOM.render(
-  <React.StrictMode>
-    <AppRourter />
-  </React.StrictMode>,
+  <AppRourter />,
   document.getElementById('root')
 );
 
