@@ -12,8 +12,8 @@
   width: 90%;
 }
 .form_container__field:focus{
-  outline: none;
   border-bottom: 1px solid #1b61db !important;
+  outline: none;
   
   transition: border-bottom .5 ease-in-out ;
 }
@@ -21,18 +21,21 @@
 .form_container__field:invalid{
   border-bottom: 1px solid #ef0808 !important;
   animation: shake 300ms;
-
 }
 
+.form_modal__field-error{
+  border: 1px solid #ef0808 !important;
+  animation: shake 500ms; 
+}
+@keyframes shake {
+  25% {transform: translateX(5px)}
+  50% {transform: translateX(-5px)}
+  75% {transform: translateX(5px)}
+}
 .form_container__button{
   width: 100%;
 }
 
-@keyframes shake {
-  25% {transform: translateX(4px)}
-  50% {transform: translateX(-4px)}
-  75% {transform: translateX(4px)}
-}
 
 /* Calendar */
 .calendar_container{
@@ -67,7 +70,7 @@
   color: #202020;
   display: inline;
   max-height: 620px;
-  max-width: 500px;
+  min-width: 350px;
   outline: none;
   padding: 10px;
 }
@@ -79,4 +82,30 @@
   right: 0;
   top: 0;
   position: fixed;
+}
+.form_modal__field{
+  display: flex;
+  border: 1px solid #737373;
+  border-radius: 5px;
+  padding: 4px;
+  outline: none;
+  width: 100%;
+}
+
+.form_modal__field::placeholder{
+  color: #8a8a8a;
+  font-size: .9rem;
+}
+
+.form_modal__button{
+  width: 100%;
+}
+
+/* DatePickler */
+.react-datetime-picker input:focus{
+  outline: none;
+}
+
+.react-datetime-picker__wrapper{
+  border: 0px solid #737373 !important;
 }
