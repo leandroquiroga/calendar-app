@@ -3,6 +3,11 @@ import { Navbar } from './components/ui/Navbar'
 import { messages_es } from './helpers/calendar-messages-es';
 import { CalendarEvent } from './components/calendar/CalendarEvent';
 import { Calendar, momentLocalizer } from 'react-big-calendar';
+import { CalendarModal } from './components/calendar/CalendarModal';
+
+import { useDispatch } from 'react-redux';
+import { uiOpenModal } from './actions/actions';
+
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 
 import moment from 'moment';
@@ -31,11 +36,14 @@ const event = [
 ];
 
 export const CalendarApp = () => {
+
+  const dispatch = useDispatch();
+
   // Mantiene el estado de la ultima vista
   const [lastView, setLastView] = useState(localStorage.getItem('lastView') || 'month');
   
-  // Evento doble click
-  const handleOnDoubleClick = (e) => console.log(e);
+  // Dispara la accion para abrir el modal
+  const handleOnDoubleClick = () => dispatch(uiOpenModal());
   
   // Evento seleccionado
   const handleEventSelect = (e) => console.log(e);
@@ -81,6 +89,8 @@ export const CalendarApp = () => {
           event: CalendarEvent,
         }}
       />
+
+      <CalendarModal />
     </section>
   )
 }
