@@ -4,7 +4,7 @@ export const customStylesModal = {
     left: '50%',
     right: 'auto',
     bottom: 'auto',
-    marginRight: '-50%',
-    transform: 'translate(-50%, -50%)',
+    marginRight: '-15%',
+    transform: 'translate(-50%, 0%)',
   },
 }
