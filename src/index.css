@@ -4,7 +4,6 @@
   box-sizing: border-box;
   font-family: 'Poppins', sans-serif;
 }
-
 /* Formulario */
 .form_container{
   padding: 10px;
@@ -17,38 +16,27 @@
   
   transition: border-bottom .5 ease-in-out ;
 }
-
 .form_container__field:invalid{
   border-bottom: 1px solid #ef0808 !important;
   animation: shake 300ms;
 }
-
 .form_modal__field-error{
   border: 1px solid #ef0808 !important;
   animation: shake 500ms; 
 }
-@keyframes shake {
-  25% {transform: translateX(5px)}
-  50% {transform: translateX(-5px)}
-  75% {transform: translateX(5px)}
-}
 .form_container__button{
   width: 100%;
 }
-
-
 /* Calendar */
 .calendar_container{
   display: flex;
   flex-flow: column;
   height: 100vh;
 }
-
 /* Modal */
 .ReactModalPortal > div{
   opacity: 0;
 }
-
 .ReactModalPortal .ReactModal__Overlay {
   align-items: center;
   display: flex;
@@ -59,11 +47,9 @@
 .ReactModalPortal .ReactModal__Overlay--after-open {
   opacity: 1;
 }
-
 .ReactModalPortal .ReactModal__Overlay--before-close {
   opacity: 0;
 }
-
 .modal_container {
   background: #FFF;
   border-radius: 5px;
@@ -74,7 +60,6 @@
   outline: none;
   padding: 10px;
 }
-
 .modal_container__fondo {
   background-color: rgba(0, 0, 0, 0.894);
   bottom: 0;
@@ -91,21 +76,41 @@
   outline: none;
   width: 100%;
 }
-
 .form_modal__field::placeholder{
   color: #8a8a8a;
   font-size: .9rem;
 }
-
 .form_modal__button{
   width: 100%;
 }
-
 /* DatePickler */
 .react-datetime-picker input:focus{
   outline: none;
 }
-
 .react-datetime-picker__wrapper{
   border: 0px solid #737373 !important;
+}
+/* Button Open modal*/
+.button_icon{
+  bottom: 10px;
+  cursor: pointer;
+  height: 50px;
+  position: fixed;
+  right: 10px;
+  width: 50px;
+}
+.button_icon:hover{
+  animation: animationButton 500ms; 
+}
+
+/*Keyframes*/
+@keyframes shake {
+  25% {transform: translateX(5px)}
+  50% {transform: translateX(-5px)}
+  75% {transform: translateX(5px)}
+}
+@keyframes animationButton {
+  25% {transform: translateY(5px)}
+  50% {transform: translateY(-5px)}
+  75% {transform: translateY(5px)}
 }
