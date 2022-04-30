@@ -12,6 +12,8 @@ import 'react-big-calendar/lib/css/react-big-calendar.css';
 
 import moment from 'moment';
 import 'moment/locale/es';
+import { eventSetActive } from './actions/events';
+import { AddNewFab } from './components/ui/AddNewFab';
 
 // Configuracion en español de moment
 moment.locale('es') 
@@ -46,7 +48,10 @@ export const CalendarApp = () => {
   const handleOnDoubleClick = () => dispatch(uiOpenModal());
   
   // Evento seleccionado
-  const handleEventSelect = (e) => console.log(e);
+  const handleEventSelect = (e) => {
+    dispatch(eventSetActive(e))
+    dispatch(uiOpenModal());
+  };
 
   // Evento de cambio de vista
   const handleOnViewChange = (e) => {
@@ -91,6 +96,8 @@ export const CalendarApp = () => {
       />
 
       <CalendarModal />
+
+      <AddNewFab />
     </section>
   )
 }
