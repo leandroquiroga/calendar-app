@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { customStylesModal } from '../../helpers/customStylesModal';
 
 import DateTimePicker from 'react-datetime-picker';
@@ -6,6 +6,7 @@ import Modal from 'react-modal';
 import moment from 'moment';
 import { useDispatch, useSelector } from 'react-redux';
 import { uiCloseModal } from '../../actions/actions';
+import { clearEventActive, eventAddNew, updatedEvent } from '../../actions/events';
 
 // Obtenemos el id #root para el modal
 Modal.setAppElement('#root');
@@ -16,11 +17,18 @@ const nowDateStart = moment().minutes(0).seconds(0).add(1, 'hours');
 // Valor final de la fecha
 const nowDateEnd = nowDateStart.clone().add(1, 'hours');
 
-
+// Valor inicial del formulario 
+const initalValue = {
+  title: '',
+  notes: '',
+  end: nowDateEnd.toDate(),
+  start: nowDateStart.toDate(),
+}
 export const CalendarModal = () => {
   
   const dispatch = useDispatch();
   const { modalOpen } = useSelector(state => state.ui);
+  const { activeEvent } = useSelector(state => state.calendar);
 
   // Mantiene el estado de la fecha inicial seleccionada 
   const [startDate, setStartDate] = useState(nowDateStart.toDate());
@@ -31,16 +39,29 @@ export const CalendarModal = () => {
   const [errorTitle, setErrorTitle] = useState(true);
   
   // Propiedades iniciales del formulario 
-  const [formValues, setFormValues] = useState({
-    title: '',
-    notes: '',
-    end: nowDateEnd.toDate(),
-    start: nowDateStart.toDate(),
-  });
+  const [formValues, setFormValues] = useState(initalValue);
+  
+  const { title, notes, start, end } = formValues;
+  
 
-  // Dispara la accion para cerrar el modal
-  const closeModal = () => dispatch(uiCloseModal())
-  const { title, notes, start, end} = formValues;
+  // Al abrir el modal,
+  // si exite el activeEvent coloca los valores al formulario
+  // sino reinicia al estado inicial el formulario
+  useEffect(() => {
+    if (activeEvent) {
+      setFormValues(activeEvent);
+    } else {
+      setFormValues(initalValue)
+    }
+  }, [activeEvent]);
+
+  // Dispara la accion para cerrar el modal, limpia el formulario
+  // y reinicia el esta de propiedad activeEvent
+  const closeModal = () => {
+    dispatch(uiCloseModal());
+    setFormValues(initalValue);
+    dispatch(clearEventActive())
+  }
   
   const handleInputChange = ({ target }) => {
     setFormValues({
@@ -69,6 +90,24 @@ export const CalendarModal = () => {
       return setErrorTitle(false);
     };
 
+    if (activeEvent) {
+    
+      //Actualiza el evento 
+      dispatch(updatedEvent(formValues))
+      
+    } else {
+      // Realiza la grabacion del evento
+      dispatch(eventAddNew({
+        ...formValues,
+        id: new Date().getTime(),
+        user: {
+          _id: '123', 
+          name: 'Juan Perez',
+          email: 'julitoperez@corre.com'
+        }
+      }))
+    }
+    
     setErrorTitle(true);
     closeModal()
   }
@@ -102,7 +141,9 @@ export const CalendarModal = () => {
         overlayClassName='modal_container__fondo'
         style={customStylesModal}
       > 
-        <h1 className='font-bold text-center fs-5'> Nuevo Evento </h1>
+        <h1 className='font-bold text-center fs-5'>
+          {(activeEvent) ? 'Editar Evento' : 'Nueva Evento'}
+        </h1>
         <hr />
         <form
           className='container'
@@ -183,6 +224,7 @@ export const CalendarModal = () => {
           </button>
 
         </form>
+
       </Modal>
 
     </article>
