@@ -99,9 +99,21 @@
   right: 10px;
   width: 50px;
 }
-.button_icon:hover{
+/* Button delete */
+.button_icon__delete{
+  bottom: 10px;
+  cursor: pointer;
+  height: 50px;
+  position: fixed;
+  left: 10px;
+  width: 50px;
+  z-index: 100;
+}
+.button_icon:hover,
+.button_icon__delete:hover{
   animation: animationButton 500ms; 
 }
+
 
 /*Keyframes*/
 @keyframes shake {
