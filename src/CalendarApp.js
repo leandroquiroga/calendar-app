@@ -5,15 +5,16 @@ import { CalendarEvent } from './components/calendar/CalendarEvent';
 import { Calendar, momentLocalizer } from 'react-big-calendar';
 import { CalendarModal } from './components/calendar/CalendarModal';
 
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { uiOpenModal } from './actions/actions';
 
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 
 import moment from 'moment';
 import 'moment/locale/es';
-import { eventSetActive } from './actions/events';
+import { clearEventActive, eventSetActive } from './actions/events';
 import { AddNewFab } from './components/ui/AddNewFab';
+import { DeleteEventFab } from './components/ui/DeleteEventFab';
 
 // Configuracion en español de moment
 moment.locale('es') 
@@ -21,42 +22,32 @@ moment.locale('es')
 // Configuracion del localizer
 const localizer = momentLocalizer(moment);
 
-
-// Lista de eventos provisoria
-const event = [
-  {
-    title: 'Cita',
-    notes: 'Llevar el mate',
-    start: moment().toDate(),
-    end: moment().add(4, 'hours').toDate(),
-    user: {
-      id: '245634',
-      name: 'Leandro',
-      email: 'leandro@correo.com'
-    }
-  }
-];
-
 export const CalendarApp = () => {
 
   const dispatch = useDispatch();
+  const { events, activeEvent  } = useSelector(state => state.calendar);
 
   // Mantiene el estado de la ultima vista
   const [lastView, setLastView] = useState(localStorage.getItem('lastView') || 'month');
   
   // Dispara la accion para abrir el modal
-  const handleOnDoubleClick = () => dispatch(uiOpenModal());
+  const handleOnDoubleClick = () => {
+    dispatch(uiOpenModal());
+  }
   
   // Evento seleccionado
   const handleEventSelect = (e) => {
-    dispatch(eventSetActive(e))
-    dispatch(uiOpenModal());
+    dispatch(eventSetActive(e));
   };
 
   // Evento de cambio de vista
   const handleOnViewChange = (e) => {
     setLastView(e);
     localStorage.setItem('lastView', e);
+  }
+
+  const onSelectSlot = e => {
+    dispatch(clearEventActive())
   }
 
   const eventSytleGetter = (event, start, end, isSelect) => {
@@ -80,13 +71,15 @@ export const CalendarApp = () => {
 
       <Calendar 
         localizer={localizer}
-        events={event}
+        events={events}
         messages={messages_es}
         eventPropGetter={eventSytleGetter}
         startAccessor='start'
         endAccessor='end'
         step={15}
         onSelectEvent={handleEventSelect}
+        onSelectSlot={onSelectSlot}
+        selectable={true}
         onView={handleOnViewChange}
         view={ lastView }
         onDoubleClickEvent={handleOnDoubleClick}
@@ -98,6 +91,10 @@ export const CalendarApp = () => {
       <CalendarModal />
 
       <AddNewFab />
+      {
+        (activeEvent) && <DeleteEventFab/>
+      }
+
     </section>
   )
 }
