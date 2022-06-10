@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux/es/exports';
+import { useDispatch, useSelector } from 'react-redux';
 import { CalendarApp } from '../CalendarApp';
 import { Login } from '../components/auth/Login';
 import { Register } from '../components/auth/Register';
