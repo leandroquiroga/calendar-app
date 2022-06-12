@@ -6,10 +6,11 @@ import Modal from 'react-modal';
 import moment from 'moment';
 import { useDispatch, useSelector } from 'react-redux';
 import { uiCloseModal } from '../../actions/actions';
-import { clearEventActive, eventAddNew, updatedEvent } from '../../actions/events';
+import { clearEventActive, eventStartAddNew, eventStartLoading, eventStartUpdate } from '../../actions/events';
 
 // Obtenemos el id #root para el modal
-Modal.setAppElement('#root');
+
+(process.env.NODE_ENV !== 'test') && Modal.setAppElement('#root');
 
 // Valor inicial de la fecha
 const nowDateStart = moment().minutes(0).seconds(0).add(1, 'hours');
@@ -32,6 +33,8 @@ export const CalendarModal = () => {
 
   // Mantiene el estado de la fecha inicial seleccionada 
   const [startDate, setStartDate] = useState(nowDateStart.toDate());
+
+  const [errorMsgDate, setErrorMsgDate] = useState(false)
   
   // Mantiene el estado de la fecha final seleccionada
   const [endDate, setEndDate] = useState(nowDateEnd.toDate());
@@ -54,6 +57,10 @@ export const CalendarModal = () => {
       setFormValues(initalValue)
     }
   }, [activeEvent]);
+
+  useEffect(() => {
+    dispatch(eventStartLoading());
+  }, [dispatch]);
 
   // Dispara la accion para cerrar el modal, limpia el formulario
   // y reinicia el esta de propiedad activeEvent
@@ -82,8 +89,10 @@ export const CalendarModal = () => {
     // Valida que la hora de finalizacion del evento no sea
     // menor al de la inicializacion
     if (momentStart.isSameOrAfter(momentEnd)) { 
-      console.log('Hora incorrecta')
+     return setErrorMsgDate(true)
     }
+
+    setErrorTitle(false);
 
     // Corregir este choclo mañana Urgente ! 
     if (title.trim().length < 2) {
@@ -91,23 +100,12 @@ export const CalendarModal = () => {
     };
 
     if (activeEvent) {
-    
       //Actualiza el evento 
-      dispatch(updatedEvent(formValues))
-      
+      dispatch(eventStartUpdate(formValues))
     } else {
       // Realiza la grabacion del evento
-      dispatch(eventAddNew({
-        ...formValues,
-        id: new Date().getTime(),
-        user: {
-          _id: '123', 
-          name: 'Juan Perez',
-          email: 'julitoperez@corre.com'
-        }
-      }))
-    }
-    
+      dispatch(eventStartAddNew(formValues));
+    };
     setErrorTitle(true);
     closeModal()
   }
@@ -134,6 +132,7 @@ export const CalendarModal = () => {
     <article className='d-flex justify-content-center'>
       <Modal
         className='modal_container'
+        ariaHideApp={process.env.NODE_ENV !== 'test' }
         closeTimeoutMS={200}
         isOpen={modalOpen}
         //onAfterOpen={afterOpenModal}
@@ -178,6 +177,7 @@ export const CalendarModal = () => {
               value={endDate}
             />
           </div>
+          {errorMsgDate && <small className='text-center form-text text-danger'>La hora es incorrecta</small> }
           <hr />
 
           <div className='form-group my-1'>
