@@ -1,9 +1,15 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom';
 import { useForm } from './../../hooks/useForm';
+import { authStartLogin } from '../../actions/auth';
+import { useDispatch } from 'react-redux';
 import logoLogin from '../../assets/login.svg';
 
 export const Login = () => {
+
+  const dispatch = useDispatch();
+  const [msgError, setMsgError] = useState('');
+  const [buttonDisabled, setButtonDisabled] = useState(false);
 
   const [{ email, password }, handleChange] = useForm({
     email: '',
@@ -13,18 +19,27 @@ export const Login = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    console.log('Iniciando...')
-  }
+    dispatch(authStartLogin(email, password, setMsgError));
+  };
+  
+  useEffect(() => {
+    if ([email, password].includes('')) {
+      setButtonDisabled(true);
+      return
+    };
+    setButtonDisabled(false)
+  }, [email, password, buttonDisabled])
+
   return (
     <section
       className='row p-0 m-0'
-      style={{height: 100 + 'vh', width: 100 + '%'}}
+      style={{ height: 100 + 'vh', width: 100 + '%' }}
     >
-      <article className='col-md-6 d-flex flex-column justify-content-center align-items-center'> 
+      <article className='col-md-6 d-flex flex-column justify-content-center align-items-center'>
         <div className='border rounded-circle overflow-hidden shadow-sm p-3'>
-          <img 
+          <img
             className='img-fluid'
-            style={{width: 250 + 'px'}}
+            style={{ width: 250 + 'px' }}
             src={logoLogin}
             alt='login'
           />
@@ -35,7 +50,7 @@ export const Login = () => {
           <small className='fw-normal fs-6'> Inicie sesión para abrir su agenda web. </small>
           <hr />
           <span className='m-0'>
-            ¿No tienes cuenta? Haz click en {''} 
+            ¿No tienes cuenta? Haz click en {''}
             <Link
               to='/register'
               className='text-decoration-none'
@@ -46,7 +61,7 @@ export const Login = () => {
         </div>
 
       </article>
-      <article className='col-md-6 bg-primary d-flex flex-column justify-content-center align-items-center'> 
+      <article className='col-md-6 bg-primary d-flex flex-column justify-content-center align-items-center'>
         <h1 className='text-white fs-3 p-4'> Inicia Sesión </h1>
         <form
           className='form-control my-5 form_container bg-white border-0 rounded p-3'
@@ -59,7 +74,7 @@ export const Login = () => {
             >
               Correo electronico:
             </label>
-            <input 
+            <input
               className='border-0 border-bottom form_container__field'
               id='email'
               placeholder='Ingrese su email...'
@@ -68,15 +83,15 @@ export const Login = () => {
               value={email}
               onChange={handleChange}
             />
-          </div> 
+          </div>
           <div className='mb-3 d-flex flex-column'>
-          <label
+            <label
               htmlFor='password'
               className='fw-normal form-label'
             >
               Contraseña:
             </label>
-            <input 
+            <input
               className='border-0 border-bottom form_container__field'
               id='password'
               placeholder='Ingrese su contraseña...'
@@ -89,12 +104,19 @@ export const Login = () => {
 
           <button
             type='submit'
-            className='btn btn-primary rounded p-2 form_container__button'
+            disabled={buttonDisabled}
+            className={
+              (buttonDisabled)
+                ? 'btn btn-primary rounded p-2 form_container__button form_container__button-disabled'
+                : 'btn btn-primary rounded p-2 form_container__button'}
           >
             Iniciar sesión
           </button>
+          {
+            (msgError !== '') && <p className='text-center mt-2 text-danger fs-6'>{msgError}</p>
+          }
         </form>
       </article>
     </section>
   )
-}
+};
