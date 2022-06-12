@@ -4,10 +4,12 @@ export const CalendarEvent = ({ event }) => {
 
   const { title, user, notes } = event;
   return (
-    <article className='d-flex flex-column justify-content-center'>
-      <span className='my-1 fs-5'> {title} </span>
-      <strong className='my-1 fs-6'> -{user.name} </strong>
-      <small className='my-1 fs-6'>{ notes }</small>
+    <article className='d-flex flex-column justify-content-center align-content-center flex-wrap'>
+      <span className='calendar_event__title'> {title} </span>
+      <span className='calendar_event__name'> -{user.name} </span>
+      {
+        (notes) && <small className='calendar_event__notes'>{notes}</small>
+      }
     </article>
   )
-}
+};
