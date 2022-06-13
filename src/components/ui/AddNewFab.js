@@ -3,9 +3,8 @@ import { useDispatch } from 'react-redux'
 import { uiOpenModal } from '../../actions/actions';
 
 export const AddNewFab = () => {
-  
-  const dispatch = useDispatch();
 
+  const dispatch = useDispatch();
   // Abre el modal 
   const handleOpenModal = () => dispatch(uiOpenModal())
   
@@ -17,4 +16,4 @@ export const AddNewFab = () => {
       <i className="fa-solid fa-plus"></i>
     </button>
   )
-}
+};
