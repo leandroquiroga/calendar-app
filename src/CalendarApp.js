@@ -25,21 +25,20 @@ const localizer = momentLocalizer(moment);
 export const CalendarApp = () => {
 
   const dispatch = useDispatch();
-  const { events, activeEvent  } = useSelector(state => state.calendar);
+  const { events, activeEvent } = useSelector(state => state.calendar);
+  const { uid } = useSelector(state => state.auth);
+
+  // const { user } = activeEvent;
 
   // Mantiene el estado de la ultima vista
   const [lastView, setLastView] = useState(localStorage.getItem('lastView') || 'month');
   
   // Dispara la accion para abrir el modal
-  const handleOnDoubleClick = () => {
-    dispatch(uiOpenModal());
-  }
-  
-  // Evento seleccionado
-  const handleEventSelect = (e) => {
-    dispatch(eventSetActive(e));
-  };
+  const handleOnDoubleClick = () => dispatch(uiOpenModal());
 
+  // Evento seleccionado
+  const handleEventSelect = (e) => dispatch(eventSetActive(e));
+  
   // Evento de cambio de vista
   const handleOnViewChange = (e) => {
     setLastView(e);
@@ -51,10 +50,11 @@ export const CalendarApp = () => {
   }
 
   const eventSytleGetter = (event, start, end, isSelect) => {
-    // console.log(event, start, end, isSelect);
+    
+    const { user } = event;
 
     const style = {
-      backgroundColor: '#202020',
+      backgroundColor: (uid === user._id) ? '#1b61db' : '#202020',
       borderRadius: '0px',
       color: 'white',
       opacity: 0.9,
@@ -68,20 +68,19 @@ export const CalendarApp = () => {
   return (
     <section className='calendar_container'>
       <Navbar />
-
-      <Calendar 
+      <Calendar
         localizer={localizer}
         events={events}
         messages={messages_es}
         eventPropGetter={eventSytleGetter}
         startAccessor='start'
         endAccessor='end'
-        step={15}
+        step={7.5}
         onSelectEvent={handleEventSelect}
         onSelectSlot={onSelectSlot}
         selectable={true}
         onView={handleOnViewChange}
-        view={ lastView }
+        view={lastView}
         onDoubleClickEvent={handleOnDoubleClick}
         components={{
           event: CalendarEvent,
@@ -91,10 +90,12 @@ export const CalendarApp = () => {
       <CalendarModal />
 
       <AddNewFab />
-      {
-        (activeEvent) && <DeleteEventFab/>
+
+      {(activeEvent)
+        ? (activeEvent.user._id === uid) && <DeleteEventFab />
+        : null
       }
 
     </section>
   )
-}
+};
