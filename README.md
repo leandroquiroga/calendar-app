@@ -1,70 +1,100 @@
-# Getting Started with Create React App
+# Calendar App - Fronted
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Este proyecto se basa en un tipo calendario que nos permite que cada usuario pueda crear su nota, editarla, borrarla. Nos permite autenticarnos mediante un mail y contraseña y sino tenemos una cuenta podemos registrarnos. Esta aplicacion (Frontend) esta realizada con: 
 
-## Available Scripts
+* React
+* Redux
+* React Router Dom
+* Bootstrap
+* Moment
+* LocalStorage
+* Jest 
+* Enzyme
 
-In the project directory, you can run:
 
-### `npm start`
+# Funcionabilidades ⚙️
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+## Autenticacion
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+### Login
+El comoponente Login no es mas que un formulario que sus datos son procesados mediante el uso de custom hooks. Los datos (email y password) son enviados al backend precisamente a nuestra bases de datos para comprobar si nuestro usuario existe
 
-### `npm test`
+### Registro
+El comoponente Register no es mas que un formulario que sus datos son procesados mediante el uso de custom hooks. Los datos (nombre, email, password, password comfirm) son enviados a la bases de datos pero antes si todos los datos son los correctos en caso de un error el backend nos retornara un mensaje con un error.
+<hr>
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
 
-### `npm run build`
+## UI 
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+### Boton de agregar un nuevo evento
+Este boton al realizar un click dispara un evento que nos permite agregar una nueva
+nota 
+### Boton de eliminar un evento
+Este boton al realizar un click disparara un evento que nos permite eliminar una nota, el boton se habilitara si y solo se selecciona una nota
+### Navbar 
+Este es un componente que cuando estemos autenticados nos mostrara nuestro nombre con el que nos hemos registrado.
+### Spinner
+El spinner solo se muestra cuando nuestra aplicacion se usa con 
+la utilizamos con baja señal de internet
+<hr>
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+## Pagina 404 
+Este componente retorna una la famosa pagina 404 cuando intentanmos acceder a un url invalido. 
+<hr>
 
-### `npm run eject`
+## Calendar
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+### Calendar modal 
+Es el encargado de procesar los datos de una nota nueva, contiene un formulairio en la cual se debe complentar con ciertos campos obligatorios por ejemplo el titulo de la nota. En el podemos elegir la fecha de inicio y fin de nuestra nota, no se puede colocar una fecha inferior a la fecha actual, tambien hay que colocarle un titulo y una descripcion que es opcional. Dispara ciertas acciones como por ejemplo abrir y cerrar el modal, actulizar un evento etc. 
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+### Calendar event 
+Muestra la nota creada mediante el calendarModal con sus respectivos datos recuperados desde la prop que recibe. 
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+<hr>
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+## Traduccion del ingles al español
+En una funcion que se encarga de traducir todas las propiedades de la aplicacion del ingles al español 
+<hr>
 
-## Learn More
+## Peticiones con token o sin token 
+Esta funcionabilidad se divide en dos partes ya que por un lado necesitariamos realizar peticiones a nuestro backend con los token para recuperar por ejemplo el usuario de que inicia sesion, y por otro lado para recuperar todas las notas de todos los usuario, en este caso no requerimos de token. 
+<hr>
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+## Navegacion 
+Esta funcionabilidad esta requerida solamente cuando querramos iniciar sesion o registrarnos 
+<hr>
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+## Rutas privadas y publicas 
+Se han creados estas rutas para que cada usuario tenga que auntenticarse para porder realizar cualquier accion en el calendario, en caso de no estar autenticado no nos permitira entrar a la rutra principal de nuestra aplicacion. 
+<hr>
 
-### Code Splitting
+## CRUD 
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+Desde el lado del frontend podemos realizar un CRUD (Create, Read, Update, Delete) mediantes acciones que se disparan para que el backend las procese y realiza dicha peticion. 
+# Testing 🧪
+Se ha creado la seccion de testing con la intencion de testar el comportamiento de la aplicacion, con mas de 50 test unitarios como por ejemplo:
 
-### Analyzing the Bundle Size
+* Login
+* Register
+* Peticiones 
+* Acciones 
+* Rutas
+* Y muchas mas. 
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+Para realizar los test he utilizado [React Testing Library](https://testing-library.com/) y [Enzyme.js](https://enzymejs.github.io/enzyme/) con algunas configuraciones para los snapshot [enzyne-to-json](https://github.com/adriantoine/enzyme-to-json);
 
-### Making a Progressive Web App
+# ACLARACION IMPORTANTE ⛔️
+Esta aplicacion no es responsive, solo se una para fines didacto. Puede ser que el dia que se quiera probar los test puedan fallar por las fechas en el dia que se pruebe, como puede ser que la base de datos que se use ya no este disponible para ese momento en la que se use. 
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+# Deploy 👨‍💻
 
-### Advanced Configuration
+Proximamente ⌛
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+# Contacto 📫
+- [Linkedin](https://www.linkedin.com/in/leanquiroga95/)
+- [Email](mailto:leandroquiroga9514@gmail.com)
 
-### Deployment
+# Autor 👤
+Realizado con ❤️ por [Leandro Quiroga](https://github.com/leandroquiroga);
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
