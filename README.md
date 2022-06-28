@@ -1,4 +1,4 @@
-# Calendar App - Fronted
+# Calendar App - Frontend
 
 Este proyecto se basa en un tipo calendario que nos permite que cada usuario pueda crear su nota, editarla, borrarla. Nos permite autenticarnos mediante un mail y contraseña y sino tenemos una cuenta podemos registrarnos. Esta aplicacion (Frontend) esta realizada con: 
 
