@@ -1,0 +1,22 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Test in Types.js This test must retunt a capture of the object 1`] = `
+Object {
+  "authChekingFinish": "[auth] Finish checking state",
+  "authLogin": "[auth] Login",
+  "authLogout": "[auth] Logout",
+  "authStartLogin": "[auth] Start login",
+  "authStartRegister": "[auth] Start register",
+  "authStartTokenRenew": "[auth] Start token renew",
+  "clearActiveEvent": "[event] Clear notes",
+  "eventAddNew": "[event] Add new",
+  "eventDeleteNotes": "[event] Delete notes",
+  "eventLoaded": "[event] Loaded notes",
+  "eventLogout": "[event] Logout notes",
+  "eventSetActive": "[event] Set active",
+  "eventStartAddNew": "[event] Start add new",
+  "eventUpdateNotes": "[event] Updated notes",
+  "uiCloseModal": "[ui] Close modal",
+  "uiOpenModal": "[ui] Open modal",
+}
+`;
