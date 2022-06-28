@@ -1,0 +1,38 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Test on componet </PageNotFound> this test should make a snapshot correctly 1`] = `
+<section
+  className="d-flex flex-column justify-content-center align-items-center"
+  style={
+    Object {
+      "height": "100vh",
+    }
+  }
+>
+  <article
+    className="container p-2"
+  >
+    <img
+      alt="logo 404"
+      className="d-block mx-auto img-fluid"
+      src="error404.svg"
+      style={
+        Object {
+          "width": "350px",
+        }
+      }
+    />
+    <p
+      className="text-center fs-3"
+    >
+      Lo sentimos, no se ha encontrado la URL
+    </p>
+  </article>
+  <button
+    className="btn btn-dark p-2"
+    onClick={[Function]}
+  >
+    Regresar
+  </button>
+</section>
+`;

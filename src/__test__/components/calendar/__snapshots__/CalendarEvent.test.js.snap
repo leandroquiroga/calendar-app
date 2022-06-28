@@ -1,0 +1,27 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Test on component <CalendarEvent /> this test should make a snapshot correctly 1`] = `
+<article
+  className="d-flex flex-column justify-content-center align-content-center flex-wrap"
+>
+  <span
+    className="calendar_event__title"
+  >
+     
+    Testing
+     
+  </span>
+  <span
+    className="calendar_event__name"
+  >
+     -
+    Leandro
+     
+  </span>
+  <small
+    className="calendar_event__notes"
+  >
+    This test should run correctly
+  </small>
+</article>
+`;

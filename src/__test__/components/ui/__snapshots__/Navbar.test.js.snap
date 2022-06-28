@@ -1,0 +1,30 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Test on <Navbar /> this test should make a snapshot with <Navabar /> correctly 1`] = `
+<nav
+  className="navbar navbar-primary bg-primary"
+>
+  <section
+    className="container-fluid"
+  >
+    <span
+      className="text-white text-capitalize"
+    >
+      Hola, 
+      testing
+       !
+    </span>
+    <button
+      className="btn btn-outline-light p-2 rounded"
+      onClick={[Function]}
+    >
+      <i
+        className="fa-solid fa-arrow-right-from-bracket"
+      />
+      <span>
+         Logout 
+      </span>
+    </button>
+  </section>
+</nav>
+`;
