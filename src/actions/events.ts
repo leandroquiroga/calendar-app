@@ -1,4 +1,4 @@
-import { types } from './../types/types';
+import { types } from '../types/types';
 import { fetchWithToken } from '../helpers/fetchAPI';
 import { prepareEvents } from '../helpers/prepareEvents';
 

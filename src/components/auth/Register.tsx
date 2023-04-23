@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom';
-import { useForm } from './../../hooks/useForm';
+import { useForm } from '../../hooks/useForm';
 import logoRegister from '../../assets/register.svg'
 import { useDispatch } from 'react-redux';
 import { startRegister } from '../../actions/auth';

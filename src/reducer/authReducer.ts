@@ -1,10 +1,10 @@
 import { types } from "../types/types";
 
-const initialState = {
+interface initialState{
   checking: true,
 };
 
-export const authReducer = (state = initialState, action) => {
+export const authReducer = (state: initialState, action: any) => {
   
   switch (action.type) {
     

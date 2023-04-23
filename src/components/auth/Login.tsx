@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom';
-import { useForm } from './../../hooks/useForm';
+import { useForm } from '../../hooks/useForm';
 import { authStartLogin } from '../../actions/auth';
 import { useDispatch } from 'react-redux';
 import logoLogin from '../../assets/login.svg';
