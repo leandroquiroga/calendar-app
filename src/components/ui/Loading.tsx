@@ -1,6 +1,6 @@
 import React from 'react'
 
-export const Loading = () => {
+export const Loading = (): JSX.Element => {
   return (
     <section className='d-flex justify-content-center align-items-center min-vh-100 bg-primary'>
       <div className="lds-ring">

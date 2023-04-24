@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { ChangeEvent, useState,  } from 'react';
 
 
 export const useForm = (intialValue = {}) => {
@@ -9,7 +9,7 @@ export const useForm = (intialValue = {}) => {
   const resetForm = () => setValue(intialValue);
 
   // Permite cargar valores al formulario
-  const handleChange = ({ target }) => {
+  const handleChange = ({ target }: ChangeEvent<HTMLInputElement>) => {
     setValue({
       ...value,
       [target.name]: target.value,

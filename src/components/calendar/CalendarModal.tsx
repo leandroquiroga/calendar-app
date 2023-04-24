@@ -208,7 +208,7 @@ export const CalendarModal = () => {
               name='notes'
               onChange={handleInputChange}
               placeholder='Escriba su nota'
-              rows='5'
+              rows={5}
               type='text'
               value={notes}
             ></textarea>
