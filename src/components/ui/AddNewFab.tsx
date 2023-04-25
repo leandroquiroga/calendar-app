@@ -2,7 +2,7 @@ import React from 'react'
 import { useDispatch } from 'react-redux'
 import { uiOpenModal } from '../../actions/actions';
 
-export const AddNewFab = () => {
+export const AddNewFab = (): JSX.Element => {
 
   const dispatch = useDispatch();
   // Abre el modal 

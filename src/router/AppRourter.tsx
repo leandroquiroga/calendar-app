@@ -2,18 +2,18 @@ import React, { useEffect } from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { CalendarApp } from '../CalendarApp';
-import { Login } from '../components/auth/Login';
+import { Login } from '../components/auth/Login2';
 import { Register } from '../components/auth/Register';
 import { PageNotFound } from '../components/pageNotFound/PageNotFound';
 import { startCheking } from '../actions/auth';
-import { Loading } from '../components/ui/Loading';
 import { PrivateRoute } from './PrivateRoute';
 import { PublicRoute } from './PublicRoute';
+import { Loading } from '../components/ui/Loading';
 
 export const AppRourter = () => {
 
   const dispatch = useDispatch();
-  const { checking } = useSelector(state => state.auth);
+  const { checking } = useSelector((state: any) => state.auth);
 
   useEffect(() => {
     dispatch(startCheking());

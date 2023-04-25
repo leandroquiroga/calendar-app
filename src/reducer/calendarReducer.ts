@@ -1,11 +1,23 @@
-import { types } from './../types/types';
+import { types } from '../types/types';
 
-const initialState = {
+interface EventData {
+  id: number;
+  title: string;
+  start: Date;
+  end: Date
+}
+
+interface CalendarState {
+  events: EventData[],
+  activeEvent: EventData | null;
+}
+
+const initialState: CalendarState = {
   events: [],
-  activeEvent: null
+  activeEvent: null,
 };
 
-export const calendarReducer = (state = initialState, action) => {
+export const calendarReducer = (state = initialState, action: any) => {
   
   switch (action.type) {
     case types.eventSetActive:
@@ -39,7 +51,7 @@ export const calendarReducer = (state = initialState, action) => {
       return {
         ...state,
         events: state.events.filter(
-          e => e.id !== state.activeEvent.id
+          e => e.id !== state.activeEvent?.id
         ),
         activeEvent: null
       };
@@ -52,7 +64,7 @@ export const calendarReducer = (state = initialState, action) => {
       
     case types.eventLogout:
       return {
-        ...initialState
+        ...state,
       };
     
     default:

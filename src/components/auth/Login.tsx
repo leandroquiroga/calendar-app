@@ -1,43 +1,45 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, ChangeEvent } from 'react'
 import { Link } from 'react-router-dom';
-import { useForm } from './../../hooks/useForm';
-import logoRegister from '../../assets/register.svg'
 import { useDispatch } from 'react-redux';
-import { startRegister } from '../../actions/auth';
+import { AnyAction, Dispatch } from 'redux';
 
-export const Register = () => {
+import { useForm } from '../../hooks/useForm';
+import { authStartLogin } from '../../actions/auth';
+import logoLogin from '../../assets/login.svg';
 
-  const dispatch = useDispatch();
-  const [buttonDisabled, setButtonDisabled] = useState(false);
-  const [msgError, setMsgError] = useState('');
+export interface InitialValues {
+  email: string;
+  password: string;
+}
 
-  
-  const [value, handleChange] = useForm({
-    name: '',
-    email: '',
-    password: '',
-    passwordConfirm: '',
-  });
+const valueForm: InitialValues = {
+  email: '',
+  password: '',
+}
+export const Login = () => {
 
-  const { email, password, name, passwordConfirm } = value;
+  const dispatch = useDispatch<Dispatch<AnyAction>>();
+  const [msgError, setMsgError] = useState<string>('');
+  const [buttonDisabled, setButtonDisabled] = useState<boolean>(false);
 
-  const handleSubmit = (e) => {
+  const [value, handleChange] = useForm<InitialValues>(valueForm);
+
+  const { email, password } = value;
+
+  const handleSubmit = (e: ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
 
-    if (password !== passwordConfirm) {
-      return setMsgError('Las contraseñas deben ser iguales');
-    }
-    dispatch(startRegister(email, password, name, setMsgError))
+    dispatch(authStartLogin(email, password, setMsgError));
   };
-
+  
   useEffect(() => {
-    if ([email, password, name, passwordConfirm].includes('')) {
+    if ([email, password].includes('')) {
       setButtonDisabled(true);
       return
     };
-
     setButtonDisabled(false)
-  }, [email, password, name, passwordConfirm, buttonDisabled])
+  }, [email, password, buttonDisabled])
+
   return (
     <section
       className='row p-0 m-0'
@@ -47,51 +49,34 @@ export const Register = () => {
         <div className='border rounded-circle overflow-hidden shadow-sm p-3'>
           <img
             className='img-fluid'
-            style={{ width: 250 + 'px', height: 250 + 'px' }}
-            src={logoRegister}
-            alt='register'
+            style={{ width: 250 + 'px' }}
+            src={logoLogin}
+            alt='login'
           />
         </div>
 
         <div className='text-center p-2 mt-3'>
           <p className='fs-5 fw-bold'> !Bienvenido a Calendar! </p>
-          <small className='fw-normal fs-6'> Registrate para crear tu agenda web. </small>
+          <small className='fw-normal fs-6'> Inicie sesión para abrir su agenda web. </small>
           <hr />
           <span className='m-0'>
-            ¿Tienes cuenta? Haz click en {''}
+            ¿No tienes cuenta? Haz click en {''}
             <Link
-              to='/login'
+              to='/register'
               className='text-decoration-none'
             >
-              Inicia sesión
+              Registrarme
             </Link>
           </span>
         </div>
 
       </article>
       <article className='col-md-6 bg-primary d-flex flex-column justify-content-center align-items-center'>
-        <h1 className='text-white fs-3 p-4'> Registrarte </h1>
+        <h1 className='text-white fs-3 p-4'> Inicia Sesión </h1>
         <form
           className='form-control my-5 form_container bg-white border-0 rounded p-3'
-          onSubmit={handleSubmit}
+          onSubmit={(e) => handleSubmit}
         >
-          <div className='mb-3 d-flex flex-column'>
-            <label
-              htmlFor='name'
-              className='fw-normal form-label'
-            >
-              Nombre
-            </label>
-            <input
-              className='border-0 border-bottom form_container__field'
-              id='name'
-              placeholder='Ingrese su nombre...'
-              type='text'
-              name='name'
-              value={name}
-              onChange={handleChange}
-            />
-          </div>
           <div className='mb-3 d-flex flex-column'>
             <label
               htmlFor='email'
@@ -106,7 +91,7 @@ export const Register = () => {
               type='email'
               name='email'
               value={email}
-              onChange={handleChange}
+              onChange={(e) => handleChange}
             />
           </div>
           <div className='mb-3 d-flex flex-column'>
@@ -123,24 +108,7 @@ export const Register = () => {
               type='password'
               name='password'
               value={password}
-              onChange={handleChange}
-            />
-          </div>
-          <div className='mb-3 d-flex flex-column'>
-            <label
-              htmlFor='passwordConfirm'
-              className='fw-normal form-label'
-            >
-              Repetir contraseña:
-            </label>
-            <input
-              className='border-0 border-bottom form_container__field'
-              id='passwordConfirm'
-              placeholder='Repita su contraseña...'
-              type='password'
-              name='passwordConfirm'
-              value={passwordConfirm}
-              onChange={handleChange}
+              onChange={(e) => handleChange}
             />
           </div>
 
@@ -152,7 +120,7 @@ export const Register = () => {
                 ? 'btn btn-primary rounded p-2 form_container__button form_container__button-disabled'
                 : 'btn btn-primary rounded p-2 form_container__button'}
           >
-            Registrarme
+            Iniciar sesión
           </button>
           {
             (msgError !== '') && <p className='text-center mt-2 text-danger fs-6'>{msgError}</p>

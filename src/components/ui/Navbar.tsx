@@ -2,7 +2,7 @@ import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { startUserLogut } from '../../actions/auth';
 
-export const Navbar = () => {
+export const Navbar = (): JSX.Element => {
   
   const { auth } = useSelector(state => state);
   const dispatch = useDispatch();
