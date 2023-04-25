@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { CalendarApp } from '../CalendarApp';
-import { Login } from '../components/auth/Login';
+import { Login } from '../components/auth/Login2';
 import { Register } from '../components/auth/Register';
 import { PageNotFound } from '../components/pageNotFound/PageNotFound';
 import { startCheking } from '../actions/auth';

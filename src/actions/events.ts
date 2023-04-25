@@ -43,7 +43,7 @@ const updatedEvent = (event: Event) => ({
 
 const deleteEventNotes = () => ({ type: types.eventDeleteNotes });
 
-export const eventStartAddNew = (event: Event) => {
+export const eventStartAddNew = (event: Event): any => {
   return async (dispatch: AppDispatch, getState: () => RootState) => {
     const { uid, name } = getState().auth;
 
@@ -72,7 +72,7 @@ export const eventSetActive = (event: Event) => ({
 
 export const clearEventActive = () => ({ type: types.clearActiveEvent });
 
-export const eventStartLoading = () => {
+export const eventStartLoading = (): any => {
   return async (dispatch: AppDispatch) => {
     try {
       const response = await fetchWithToken("events");
@@ -86,7 +86,7 @@ export const eventStartLoading = () => {
   };
 };
 
-export const eventStartUpdate = (event: Event) => {
+export const eventStartUpdate = (event: Event): any => {
   return async (dispatch: AppDispatch) => {
     try {
       const response = await fetchWithToken(`events/${event.id}`, "PUT", event);

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { ChangeEvent, useEffect, useState } from 'react'
 import { customStylesModal } from '../../helpers/customStylesModal';
 
 import DateTimePicker from 'react-datetime-picker';
@@ -18,13 +18,21 @@ const nowDateStart = moment().minutes(0).seconds(0).add(1, 'hours');
 // Valor final de la fecha
 const nowDateEnd = nowDateStart.clone().add(1, 'hours');
 
+export interface CalendarInitialValue {
+  title: string ;
+  notes: string ;
+  end: Date ;
+  start: Date ;
+}
+
+
 // Valor inicial del formulario 
-const initalValue = {
-  title: '',
-  notes: '',
+const initalValue: CalendarInitialValue = {
+  title: "",
+  notes: "",
   end: nowDateEnd.toDate(),
   start: nowDateStart.toDate(),
-}
+};
 export const CalendarModal = () => {
   
   const dispatch = useDispatch();
@@ -32,14 +40,14 @@ export const CalendarModal = () => {
   const { activeEvent } = useSelector(state => state.calendar);
 
   // Mantiene el estado de la fecha inicial seleccionada 
-  const [startDate, setStartDate] = useState(nowDateStart.toDate());
+  const [startDate, setStartDate] = useState<Date>(nowDateStart.toDate());
 
-  const [errorMsgDate, setErrorMsgDate] = useState(false)
+  const [errorMsgDate, setErrorMsgDate] = useState<boolean>(false)
   
   // Mantiene el estado de la fecha final seleccionada
-  const [endDate, setEndDate] = useState(nowDateEnd.toDate());
+  const [endDate, setEndDate] = useState<Date>(nowDateEnd.toDate());
 
-  const [errorTitle, setErrorTitle] = useState(true);
+  const [errorTitle, setErrorTitle] = useState<boolean>(true);
   
   // Propiedades iniciales del formulario 
   const [formValues, setFormValues] = useState(initalValue);
@@ -70,48 +78,47 @@ export const CalendarModal = () => {
     dispatch(clearEventActive())
   }
   
-  const handleInputChange = ({ target }) => {
+  const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     setFormValues({
       ...formValues,
-      [target.name]: target.value,
-    })
+      [e.target.name]: e.target.value,
+    });
   };
 
 
-  const handleSubmitNewEvent = (e) => {
+  const handleSubmitNewEvent = (e: ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
 
     // Variables de las fechas inicio y fin
     const momentStart = moment(start);
     const momentEnd = moment(end);
 
-
     // Valida que la hora de finalizacion del evento no sea
     // menor al de la inicializacion
-    if (momentStart.isSameOrAfter(momentEnd)) { 
-     return setErrorMsgDate(true)
+    if (momentStart.isSameOrAfter(momentEnd)) {
+      return setErrorMsgDate(true);
     }
 
     setErrorTitle(false);
 
-    // Corregir este choclo mañana Urgente ! 
+    // Corregir este choclo mañana Urgente !
     if (title.trim().length < 2) {
       return setErrorTitle(false);
-    };
+    }
 
     if (activeEvent) {
-      //Actualiza el evento 
-      dispatch(eventStartUpdate(formValues))
+      //Actualiza el evento
+      dispatch(eventStartUpdate(formValues));
     } else {
       // Realiza la grabacion del evento
       dispatch(eventStartAddNew(formValues));
-    };
+    }
     setErrorTitle(true);
-    closeModal()
-  }
+    closeModal();
+  };
   
   // Cambia el valor de la fecha inicial seleccionada y del campo start
-  const handleStartDateChange = (e) => {
+  const handleStartDateChange = (e: ChangeEvent<HTMLInputElement>) => {
     setStartDate(e);
     setFormValues({
       ...formValues,
@@ -120,12 +127,12 @@ export const CalendarModal = () => {
   };
 
   // Cambia el valor de la fecha final seleccionada y del campo end
-  const handleEndDateChange = (e) => {
+  const handleEndDateChange = (e: ChangeEvent<HTMLInputElement>) => {
     setEndDate(e);
     setFormValues({
       ...formValues,
       end: e,
-    })
+    });
   };
 
   return (
@@ -146,7 +153,7 @@ export const CalendarModal = () => {
         <hr />
         <form
           className='container'
-          onSubmit={handleSubmitNewEvent}
+          onSubmit={(e) => handleSubmitNewEvent}
         >
           
           <div className='form-group my-1'>
@@ -157,7 +164,7 @@ export const CalendarModal = () => {
             </label>
             <DateTimePicker
               className='form_modal__field'
-              onChange={handleStartDateChange}
+              onChange={(e) => handleStartDateChange}
               placeholder='Fecha inicio...'
               value={startDate}
             />
@@ -172,7 +179,7 @@ export const CalendarModal = () => {
             <DateTimePicker
               className='form_modal__field'
               minDate={startDate}
-              onChange={handleEndDateChange}
+              onChange={(e) => handleEndDateChange}
               placeholder='Fecha fin...'
               value={endDate}
             />
@@ -191,7 +198,7 @@ export const CalendarModal = () => {
               autoComplete='off'
               className={`form_modal__field ${ !errorTitle && 'form_modal__field-error' }`}
               name='title'
-              onChange={handleInputChange}
+              onChange={(e) => handleInputChange}
               placeholder='Titulo del evento'
               type='text'
               value={title}
@@ -206,7 +213,7 @@ export const CalendarModal = () => {
             <textarea
               className='form_modal__field'
               name='notes'
-              onChange={handleInputChange}
+              onChange={(e) => handleInputChange}
               placeholder='Escriba su nota'
               rows={5}
               type='text'

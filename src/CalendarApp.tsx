@@ -1,21 +1,19 @@
-import React, { useState } from 'react'
+import React, { ChangeEvent, useState } from 'react'
+import moment from 'moment';
+import { Calendar, momentLocalizer } from 'react-big-calendar';
+import { useDispatch, useSelector } from 'react-redux';
+
 import { Navbar } from './components/ui/Navbar'
 import { messages_es } from './helpers/calendar-messages-es';
 import { CalendarEvent } from './components/calendar/CalendarEvent';
-import { Calendar, momentLocalizer } from 'react-big-calendar';
 import { CalendarModal } from './components/calendar/CalendarModal';
-
-import { useDispatch, useSelector } from 'react-redux';
 import { uiOpenModal } from './actions/actions';
-
-import 'react-big-calendar/lib/css/react-big-calendar.css';
-
-import moment from 'moment';
-import 'moment/locale/es';
 import { clearEventActive, eventSetActive } from './actions/events';
 import { AddNewFab } from './components/ui/AddNewFab';
 import { DeleteEventFab } from './components/ui/DeleteEventFab';
 
+import 'moment/locale/es';
+import 'react-big-calendar/lib/css/react-big-calendar.css';
 // Configuracion en español de moment
 moment.locale('es') 
 
@@ -25,6 +23,7 @@ const localizer = momentLocalizer(moment);
 export const CalendarApp = () => {
 
   const dispatch = useDispatch();
+  console.log(dispatch)
   const { events, activeEvent } = useSelector(state => state.calendar);
   const { uid } = useSelector(state => state.auth);
 
@@ -37,17 +36,17 @@ export const CalendarApp = () => {
   const handleOnDoubleClick = () => dispatch(uiOpenModal());
 
   // Evento seleccionado
-  const handleEventSelect = (e) => dispatch(eventSetActive(e));
+  const handleEventSelect = (e: ChangeEvent<HTMLInputElement>) => dispatch(eventSetActive(e));
   
   // Evento de cambio de vista
-  const handleOnViewChange = (e) => {
+  const handleOnViewChange = (e: any) => {
     setLastView(e);
-    localStorage.setItem('lastView', e);
-  }
+    localStorage.setItem("lastView", e);
+  };
 
-  const onSelectSlot = e => {
-    dispatch(clearEventActive())
-  }
+  const onSelectSlot = (e: ChangeEvent<HTMLInputElement>) => {
+    dispatch(clearEventActive());
+  };
 
   const eventSytleGetter = (event, start, end, isSelect) => {
     

@@ -35,7 +35,11 @@ const logout = () => ({ type: types.authLogout });
 
 const eventLogout = () => ({ type: types.eventLogout });
 
-export const authStartLogin = ({email, password, setMsgError}: UserLogin) => {
+export const authStartLogin = (
+  email: string,
+  password: string,
+  setMsgError: Dispatch<SetStateAction<string>>
+): any => {
   return async (dispatch: AppDispatch) => {
     const response = await fetchNotToken(
       "auth/login",
@@ -56,14 +60,14 @@ export const authStartLogin = ({email, password, setMsgError}: UserLogin) => {
       })
     );
   };
-} 
+}; 
 
-export const startRegister = ({
-  email,
-  password,
-  name,
-  setMsgError,
-}: UserRegister) => {
+export const startRegister = (
+  email: string,
+  password: string,
+  name: string,
+  setMsgError: Dispatch<SetStateAction<string>>,
+): any => {
   return async (dispatch: AppDispatch) => {
     const response = await fetchNotToken(
       "auth/register",

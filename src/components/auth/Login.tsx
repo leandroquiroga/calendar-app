@@ -1,22 +1,32 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, ChangeEvent } from 'react'
 import { Link } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { AnyAction, Dispatch } from 'redux';
+
 import { useForm } from '../../hooks/useForm';
 import { authStartLogin } from '../../actions/auth';
-import { useDispatch } from 'react-redux';
 import logoLogin from '../../assets/login.svg';
 
+export interface InitialValues {
+  email: string;
+  password: string;
+}
+
+const valueForm: InitialValues = {
+  email: '',
+  password: '',
+}
 export const Login = () => {
 
-  const dispatch = useDispatch();
-  const [msgError, setMsgError] = useState('');
-  const [buttonDisabled, setButtonDisabled] = useState(false);
+  const dispatch = useDispatch<Dispatch<AnyAction>>();
+  const [msgError, setMsgError] = useState<string>('');
+  const [buttonDisabled, setButtonDisabled] = useState<boolean>(false);
 
-  const [{ email, password }, handleChange] = useForm({
-    email: '',
-    password: '',
-  });
+  const [value, handleChange] = useForm<InitialValues>(valueForm);
 
-  const handleSubmit = (e) => {
+  const { email, password } = value;
+
+  const handleSubmit = (e: ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
 
     dispatch(authStartLogin(email, password, setMsgError));
@@ -65,7 +75,7 @@ export const Login = () => {
         <h1 className='text-white fs-3 p-4'> Inicia Sesión </h1>
         <form
           className='form-control my-5 form_container bg-white border-0 rounded p-3'
-          onSubmit={handleSubmit}
+          onSubmit={(e) => handleSubmit}
         >
           <div className='mb-3 d-flex flex-column'>
             <label
@@ -81,7 +91,7 @@ export const Login = () => {
               type='email'
               name='email'
               value={email}
-              onChange={handleChange}
+              onChange={(e) => handleChange}
             />
           </div>
           <div className='mb-3 d-flex flex-column'>
@@ -98,7 +108,7 @@ export const Login = () => {
               type='password'
               name='password'
               value={password}
-              onChange={handleChange}
+              onChange={(e) => handleChange}
             />
           </div>
 

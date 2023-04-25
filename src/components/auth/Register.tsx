@@ -1,33 +1,43 @@
-import React, { useEffect, useState } from 'react'
+import React, { ChangeEvent, useEffect, useState } from 'react'
 import { Link } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+
 import { useForm } from '../../hooks/useForm';
 import logoRegister from '../../assets/register.svg'
-import { useDispatch } from 'react-redux';
 import { startRegister } from '../../actions/auth';
 
-export const Register = () => {
+export interface ValueRegister {
+  name: string;
+  email: string;
+  password: string;
+  passwordConfirm: string;
+}
 
-  const dispatch = useDispatch();
-  const [buttonDisabled, setButtonDisabled] = useState(false);
-  const [msgError, setMsgError] = useState('');
-
-  
-  const [value, handleChange] = useForm({
+const valueRegister: ValueRegister = {
     name: '',
     email: '',
     password: '',
     passwordConfirm: '',
-  });
+}
+
+export const Register = () => {
+
+  const dispatch = useDispatch();
+  const [buttonDisabled, setButtonDisabled] = useState<boolean>(false);
+  const [msgError, setMsgError] = useState<string>('');
+
+  
+  const [value, handleChange] = useForm<ValueRegister>(valueRegister);
 
   const { email, password, name, passwordConfirm } = value;
 
-  const handleSubmit = (e) => {
+  const handleSubmit = (e: ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
 
     if (password !== passwordConfirm) {
-      return setMsgError('Las contraseñas deben ser iguales');
+      return setMsgError("Las contraseñas deben ser iguales");
     }
-    dispatch(startRegister(email, password, name, setMsgError))
+    dispatch(startRegister(email, password, name, setMsgError));
   };
 
   useEffect(() => {
@@ -73,7 +83,7 @@ export const Register = () => {
         <h1 className='text-white fs-3 p-4'> Registrarte </h1>
         <form
           className='form-control my-5 form_container bg-white border-0 rounded p-3'
-          onSubmit={handleSubmit}
+          onSubmit={(e) => handleSubmit}
         >
           <div className='mb-3 d-flex flex-column'>
             <label
@@ -89,7 +99,7 @@ export const Register = () => {
               type='text'
               name='name'
               value={name}
-              onChange={handleChange}
+              onChange={(e) => handleChange}
             />
           </div>
           <div className='mb-3 d-flex flex-column'>
@@ -106,7 +116,7 @@ export const Register = () => {
               type='email'
               name='email'
               value={email}
-              onChange={handleChange}
+              onChange={(e) => handleChange}
             />
           </div>
           <div className='mb-3 d-flex flex-column'>
@@ -123,7 +133,7 @@ export const Register = () => {
               type='password'
               name='password'
               value={password}
-              onChange={handleChange}
+              onChange={(e) => handleChange}
             />
           </div>
           <div className='mb-3 d-flex flex-column'>
@@ -140,7 +150,7 @@ export const Register = () => {
               type='password'
               name='passwordConfirm'
               value={passwordConfirm}
-              onChange={handleChange}
+              onChange={(e) => handleChange}
             />
           </div>
 
