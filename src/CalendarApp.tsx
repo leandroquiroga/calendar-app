@@ -1,8 +1,9 @@
-import React, { ChangeEvent, useState } from 'react'
+import React, { useState } from 'react'
 import moment from 'moment';
-import { Calendar, momentLocalizer } from 'react-big-calendar';
+import { Calendar, momentLocalizer, View } from 'react-big-calendar';
 import { useDispatch, useSelector } from 'react-redux';
 
+import { RootState } from './store/store';
 import { Navbar } from './components/ui/Navbar'
 import { messages_es } from './helpers/calendar-messages-es';
 import { CalendarEvent } from './components/calendar/CalendarEvent';
@@ -23,33 +24,33 @@ const localizer = momentLocalizer(moment);
 export const CalendarApp = () => {
 
   const dispatch = useDispatch();
-  console.log(dispatch)
-  const { events, activeEvent } = useSelector(state => state.calendar);
-  const { uid } = useSelector(state => state.auth);
+  const { events, activeEvent } = useSelector((state: RootState) => state.calendar);
+  const { uid } = useSelector((state: RootState) => state.auth);
 
   // const { user } = activeEvent;
 
   // Mantiene el estado de la ultima vista
-  const [lastView, setLastView] = useState(localStorage.getItem('lastView') || 'month');
+  const [lastView, setLastView] = useState<any>(
+    localStorage.getItem("lastView") || "month"
+  );
   
   // Dispara la accion para abrir el modal
   const handleOnDoubleClick = () => dispatch(uiOpenModal());
 
   // Evento seleccionado
-  const handleEventSelect = (e: ChangeEvent<HTMLInputElement>) => dispatch(eventSetActive(e));
+  const handleEventSelect = (e: any) => dispatch(eventSetActive(e));
   
   // Evento de cambio de vista
-  const handleOnViewChange = (e: any) => {
+  const handleOnViewChange = (e: View) => {
     setLastView(e);
     localStorage.setItem("lastView", e);
   };
 
-  const onSelectSlot = (e: ChangeEvent<HTMLInputElement>) => {
+  const onSelectSlot = () => {
     dispatch(clearEventActive());
   };
 
-  const eventSytleGetter = (event, start, end, isSelect) => {
-    
+  const eventSytleGetter = (event: any, start: any, end: any, isSelect: any) => {
     const { user } = event;
 
     const style = {

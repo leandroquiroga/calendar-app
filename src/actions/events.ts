@@ -14,8 +14,8 @@ export interface Event {
 }
 
 export interface PreparedEvent {
-  end: Date;
-  start: Date;
+  end: string;
+  start: string;
   title: string;
   notes: string;
   id?: string;
@@ -31,9 +31,9 @@ const eventAddNew = (event: Event) => ({
   payload: event,
 });
 
-const eventLoaded = (event: Event[]) => ({
+const eventLoaded = (event: PreparedEvent[]) => ({
   type: types.eventLoaded,
-  payload: event
+  payload: event,
 });
 
 const updatedEvent = (event: Event) => ({

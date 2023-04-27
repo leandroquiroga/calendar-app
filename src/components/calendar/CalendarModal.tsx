@@ -7,6 +7,7 @@ import moment from 'moment';
 import { useDispatch, useSelector } from 'react-redux';
 import { uiCloseModal } from '../../actions/actions';
 import { clearEventActive, eventStartAddNew, eventStartLoading, eventStartUpdate } from '../../actions/events';
+import { RootState } from '../../store/store';
 
 // Obtenemos el id #root para el modal
 
@@ -36,8 +37,8 @@ const initalValue: CalendarInitialValue = {
 export const CalendarModal = () => {
   
   const dispatch = useDispatch();
-  const { modalOpen } = useSelector(state => state.ui);
-  const { activeEvent } = useSelector(state => state.calendar);
+  const { modalOpen } = useSelector((state: RootState) => state.ui);
+  const { activeEvent } = useSelector((state: RootState) => state.calendar);
 
   // Mantiene el estado de la fecha inicial seleccionada 
   const [startDate, setStartDate] = useState<Date>(nowDateStart.toDate());
@@ -118,7 +119,7 @@ export const CalendarModal = () => {
   };
   
   // Cambia el valor de la fecha inicial seleccionada y del campo start
-  const handleStartDateChange = (e: ChangeEvent<HTMLInputElement>) => {
+  const handleStartDateChange = (e: any) => {
     setStartDate(e);
     setFormValues({
       ...formValues,
@@ -127,7 +128,7 @@ export const CalendarModal = () => {
   };
 
   // Cambia el valor de la fecha final seleccionada y del campo end
-  const handleEndDateChange = (e: ChangeEvent<HTMLInputElement>) => {
+  const handleEndDateChange = (e: any) => {
     setEndDate(e);
     setFormValues({
       ...formValues,
@@ -164,7 +165,7 @@ export const CalendarModal = () => {
             </label>
             <DateTimePicker
               className='form_modal__field'
-              onChange={(e) => handleStartDateChange}
+              onChange={handleStartDateChange}
               placeholder='Fecha inicio...'
               value={startDate}
             />
@@ -179,7 +180,7 @@ export const CalendarModal = () => {
             <DateTimePicker
               className='form_modal__field'
               minDate={startDate}
-              onChange={(e) => handleEndDateChange}
+              onChange={handleEndDateChange}
               placeholder='Fecha fin...'
               value={endDate}
             />
@@ -216,7 +217,7 @@ export const CalendarModal = () => {
               onChange={(e) => handleInputChange}
               placeholder='Escriba su nota'
               rows={5}
-              type='text'
+              // type='text'
               value={notes}
             ></textarea>
              <small className='form-text text-muted'> Una descripcion corta (opcional)</small>
