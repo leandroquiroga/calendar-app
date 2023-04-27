@@ -3,18 +3,20 @@ import moment from 'moment';
 import { Calendar, momentLocalizer, View } from 'react-big-calendar';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { RootState } from './store/store';
-import { Navbar } from './components/ui/Navbar'
-import { messages_es } from './helpers/calendar-messages-es';
-import { CalendarEvent } from './components/calendar/CalendarEvent';
-import { CalendarModal } from './components/calendar/CalendarModal';
 import { uiOpenModal } from './actions/actions';
 import { clearEventActive, eventSetActive } from './actions/events';
+import { RootState } from './store/store';
+import { messages_es } from './helpers/calendar-messages-es';
+
+import { Navbar } from './components/ui/Navbar'
 import { AddNewFab } from './components/ui/AddNewFab';
 import { DeleteEventFab } from './components/ui/DeleteEventFab';
+import { CalendarEvent } from './components/calendar/CalendarEvent';
+import { CalendarModal } from './components/calendar/CalendarModal';
 
 import 'moment/locale/es';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
+
 // Configuracion en español de moment
 moment.locale('es') 
 
@@ -50,7 +52,7 @@ export const CalendarApp = () => {
     dispatch(clearEventActive());
   };
 
-  const eventSytleGetter = (event: any, start: any, end: any, isSelect: any) => {
+  const eventSytleGetter = (event: any) => {
     const { user } = event;
 
     const style = {

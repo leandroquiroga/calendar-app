@@ -1,31 +1,30 @@
 import React, { ChangeEvent, useEffect, useState } from 'react'
 import { customStylesModal } from '../../helpers/customStylesModal';
 
-import DateTimePicker from 'react-datetime-picker';
 import Modal from 'react-modal';
 import moment from 'moment';
 import { useDispatch, useSelector } from 'react-redux';
 import { uiCloseModal } from '../../actions/actions';
 import { clearEventActive, eventStartAddNew, eventStartLoading, eventStartUpdate } from '../../actions/events';
 import { RootState } from '../../store/store';
+import { Form, Formik } from 'formik';
+import { InputDate } from '../form/InputDate';
+import { Input } from '../form/Input';
+import { TextArea } from '../form/TextArea';
+import { Button } from '../form/Button';
 
 // Obtenemos el id #root para el modal
-
 (process.env.NODE_ENV !== 'test') && Modal.setAppElement('#root');
-
 // Valor inicial de la fecha
 const nowDateStart = moment().minutes(0).seconds(0).add(1, 'hours');
-
 // Valor final de la fecha
 const nowDateEnd = nowDateStart.clone().add(1, 'hours');
-
 export interface CalendarInitialValue {
   title: string ;
   notes: string ;
   end: Date ;
   start: Date ;
-}
-
+};
 
 // Valor inicial del formulario 
 const initalValue: CalendarInitialValue = {
@@ -42,19 +41,15 @@ export const CalendarModal = () => {
 
   // Mantiene el estado de la fecha inicial seleccionada 
   const [startDate, setStartDate] = useState<Date>(nowDateStart.toDate());
-
   const [errorMsgDate, setErrorMsgDate] = useState<boolean>(false)
   
   // Mantiene el estado de la fecha final seleccionada
   const [endDate, setEndDate] = useState<Date>(nowDateEnd.toDate());
-
   const [errorTitle, setErrorTitle] = useState<boolean>(true);
-  
+
   // Propiedades iniciales del formulario 
-  const [formValues, setFormValues] = useState(initalValue);
-  
-  const { title, notes, start, end } = formValues;
-  
+  const [formValues, setFormValues] = useState<CalendarInitialValue>(initalValue);
+  const { title, start, end } = formValues;
 
   // Al abrir el modal,
   // si exite el activeEvent coloca los valores al formulario
@@ -79,14 +74,6 @@ export const CalendarModal = () => {
     dispatch(clearEventActive())
   }
   
-  const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setFormValues({
-      ...formValues,
-      [e.target.name]: e.target.value,
-    });
-  };
-
-
   const handleSubmitNewEvent = (e: ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
 
@@ -137,104 +124,88 @@ export const CalendarModal = () => {
   };
 
   return (
-    <article className='d-flex justify-content-center'>
+    <article className="d-flex justify-content-center">
       <Modal
-        className='modal_container'
-        ariaHideApp={process.env.NODE_ENV !== 'test' }
+        className="modal_container"
+        ariaHideApp={process.env.NODE_ENV !== "test"}
         closeTimeoutMS={200}
         isOpen={modalOpen}
         //onAfterOpen={afterOpenModal}
         onRequestClose={closeModal}
-        overlayClassName='modal_container__fondo'
+        overlayClassName="modal_container__fondo"
         style={customStylesModal}
-      > 
-        <h1 className='font-bold text-center fs-5'>
-          {(activeEvent) ? 'Editar Evento' : 'Nueva Evento'}
+      >
+        <h1 className="font-bold text-center fs-5">
+          {activeEvent ? "Editar Evento" : "Nueva Evento"}
         </h1>
         <hr />
-        <form
-          className='container'
-          onSubmit={(e) => handleSubmitNewEvent}
+
+        <Formik
+          initialValues={initalValue}
+          onSubmit={(values) => console.log(values)}
         >
-          
-          <div className='form-group my-1'>
-            <label
-              className='form-label'
-            >
-              Fecha y hora inicio
-            </label>
-            <DateTimePicker
-              className='form_modal__field'
-              onChange={handleStartDateChange}
-              placeholder='Fecha inicio...'
-              value={startDate}
-            />
-          </div>
+          {(formik) => (
+            <Form noValidate className="container">
+              <InputDate
+                date={startDate}
+                handleDateChage={handleStartDateChange}
+                label="Fecha y hora inicio"
+                placeholder="Fecha inicio..."
+                styles="form_modal__field"
+              />
 
-          <div className='form-group my-1'>
-            <label
-              className='form-label'
-            >
-              Fecha y hora fin
-            </label>
-            <DateTimePicker
-              className='form_modal__field'
-              minDate={startDate}
-              onChange={handleEndDateChange}
-              placeholder='Fecha fin...'
-              value={endDate}
-            />
-          </div>
-          {errorMsgDate && <small className='text-center form-text text-danger'>La hora es incorrecta</small> }
-          <hr />
+              <InputDate
+                date={endDate}
+                minDate={startDate}
+                handleDateChage={handleEndDateChange}
+                label="Fecha y hora fin"
+                placeholder="Fecha fin.."
+                styles="form_modal__field"
+              />
+              {errorMsgDate && (
+                <small className="text-center form-text text-danger">
+                  La hora es incorrecta
+                </small>
+              )}
 
-          <div className='form-group my-1'>
-            <label
-              className='form-label'
-              htmlFor='inputTitle'
-            >
-              Titulo y notas
-            </label>
-            <input 
-              autoComplete='off'
-              className={`form_modal__field ${ !errorTitle && 'form_modal__field-error' }`}
-              name='title'
-              onChange={(e) => handleInputChange}
-              placeholder='Titulo del evento'
-              type='text'
-              value={title}
-            />
-            {(errorTitle)
-              ? <small className='form-text text-muted'> Una descripcion corta</small>
-              : <small className='form-text text-danger'> Debe colocar un titulo </small>
-            }
-          </div>
+              <Input
+                label="Titulo y notas"
+                name="title"
+                styles="form_modal__field"
+                errorTitle={errorTitle}
+                placeholder="Titulo del evento"
+                type="text"
+              />
+              {errorTitle ? (
+                <small className="form-text text-muted">
+                  {" "}
+                  Una descripcion corta
+                </small>
+              ) : (
+                <small className="form-text text-danger">
+                  {" "}
+                  Debe colocar un titulo{" "}
+                </small>
+              )}
 
-          <div className='form-group my-1'>
-            <textarea
-              className='form_modal__field'
-              name='notes'
-              onChange={(e) => handleInputChange}
-              placeholder='Escriba su nota'
-              rows={5}
-              // type='text'
-              value={notes}
-            ></textarea>
-             <small className='form-text text-muted'> Una descripcion corta (opcional)</small>
-          </div>
+              <TextArea
+                name="notes"
+                placeholder="Escriba su nota"
+                rows={5}
+                styles="form_modal__field"
+                text="Una descripcion corta (opcional)"
+              />
 
-          <button
-            className="btn btn-danger btn-block form_modal__button"
-            type="submit"
-          >
-            <i className="far fa-save"></i>
-            <span> Guardar</span>
-          </button>
-
-        </form>
-
+              <Button
+                type="submit"
+                styles="btn btn-danger btn-block form_modal__button"
+                children={<i className="far fa-save"></i>}
+                value="Guardar"
+              />
+            </Form>
+          )}
+        </Formik>
       </Modal>
-
     </article>
-  )
+  );
 }
