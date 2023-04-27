@@ -8,8 +8,8 @@ export interface Event {
   user?: User;
 }
 export interface PreparedEvent {
-  end: Date;
-  start: Date;
+  end: string;
+  start: string;
   title: string;
   notes: string;
   id?: string;
@@ -25,7 +25,7 @@ export const prepareEvents = (events: Event[]): PreparedEvent[] => {
   // Retorna el arreglo de evento pero con las propiedades end y start en un objeto tipo Date
   return events.map((event) => ({
     ...event,
-    end: moment(event.end).toDate(),
-    start: moment(event.start).toDate(),
+    end: moment(event.end).toDate().toISOString(),
+    start: moment(event.start).toDate().toISOString(),
   }));
 };

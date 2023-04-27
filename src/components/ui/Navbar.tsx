@@ -1,10 +1,11 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { startUserLogut } from '../../actions/auth';
+import { RootState } from '../../store/store';
 
 export const Navbar = (): JSX.Element => {
   
-  const { auth } = useSelector(state => state);
+  const { auth } = useSelector((state: RootState) => state);
   const dispatch = useDispatch();
 
   const handleSingOut = () => dispatch(startUserLogut());

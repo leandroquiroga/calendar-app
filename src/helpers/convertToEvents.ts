@@ -1,14 +1,14 @@
 export interface Event {
   title: string;
   notes: string;
-  end: Date;
-  start: Date;
+  end: string;
+  start: string;
   id?: string;
   user?: User;
 }
 export interface PrepareEvent {
-  end: Date;
-  start: Date;
+  end: string;
+  start: string;
   title: string;
   notes: string;
   id?: string;
@@ -25,7 +25,7 @@ export const convertToEvent = (preparedEvent: PrepareEvent[]): Event[] => {
     ...event,
     title: event.title || "",
     notes: event.notes || "",
-    end: event.end,
-    start: event.start,
+    end: event.end.toString(),
+    start: event.start.toString(),
   }));
 };
