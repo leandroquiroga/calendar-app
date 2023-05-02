@@ -49,7 +49,7 @@ export const eventStartAddNew = (event: Event): any => {
 
     try {
       const response = await fetchWithToken("events", "POST", event);
-      const body = await response.json();
+      const body = await response.data;
 
       if (body.ok) {
         event.id = body.event.id;
@@ -76,7 +76,7 @@ export const eventStartLoading = (): any => {
   return async (dispatch: AppDispatch) => {
     try {
       const response = await fetchWithToken("events");
-      const body = await response.json();
+      const body = await response.data;
       const preparedEvents = prepareEvents(body.event);
       const events = convertToEvent(preparedEvents);
       dispatch(eventLoaded(events));
@@ -90,7 +90,7 @@ export const eventStartUpdate = (event: Event): any => {
   return async (dispatch: AppDispatch) => {
     try {
       const response = await fetchWithToken(`events/${event.id}`, "PUT", event);
-      const body = await response.json();
+      const body = await response.data;
 
       if (body.ok) return dispatch(updatedEvent(event));
 
@@ -108,7 +108,7 @@ export const eventStartDelete = (): any => {
 
     try {
       const response = await fetchWithToken(`events/${id}`, "DELETE");
-      const body = await response.json();
+      const body = await response.data;
 
       if (body.ok) return dispatch(deleteEventNotes());
 

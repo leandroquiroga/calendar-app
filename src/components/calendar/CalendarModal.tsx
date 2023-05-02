@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { customStylesModal } from '../../helpers/customStylesModal';
 
 import Modal from 'react-modal';
@@ -26,7 +26,7 @@ export interface CalendarInitialValue {
   start: Date ;
 };
 
-// Valor inicial del formulario 
+// Valor inicial del formulario
 const initalValue: CalendarInitialValue = {
   title: "",
   notes: "",
@@ -34,22 +34,22 @@ const initalValue: CalendarInitialValue = {
   start: nowDateStart.toDate(),
 };
 export const CalendarModal = () => {
-  
+
   const dispatch = useDispatch();
   const { modalOpen } = useSelector((state: RootState) => state.ui);
   const { activeEvent } = useSelector((state: RootState) => state.calendar);
 
-  // Mantiene el estado de la fecha inicial seleccionada 
+  // Mantiene el estado de la fecha inicial seleccionada
   const [startDate, setStartDate] = useState<Date>(nowDateStart.toDate());
   const [errorMsgDate, setErrorMsgDate] = useState<boolean>(false)
-  
+
   // Mantiene el estado de la fecha final seleccionada
   const [endDate, setEndDate] = useState<Date>(nowDateEnd.toDate());
   const [errorTitle, setErrorTitle] = useState<boolean>(true);
 
-  // Propiedades iniciales del formulario 
+  // Propiedades iniciales del formulario
   const [formValues, setFormValues] = useState<CalendarInitialValue>(initalValue);
-  const { title, start, end } = formValues;
+  // const { title, start, end } = formValues;
 
   // Al abrir el modal,
   // si exite el activeEvent coloca los valores al formulario
@@ -73,13 +73,12 @@ export const CalendarModal = () => {
     setFormValues(initalValue);
     dispatch(clearEventActive())
   }
-  
-  const handleSubmitNewEvent = (e: ChangeEvent<HTMLInputElement>) => {
-    e.preventDefault();
+
+  const handleSubmitNewEvent = (e: CalendarInitialValue) => {
 
     // Variables de las fechas inicio y fin
-    const momentStart = moment(start);
-    const momentEnd = moment(end);
+    const momentStart = moment(e.start);
+    const momentEnd = moment(e.end);
 
     // Valida que la hora de finalizacion del evento no sea
     // menor al de la inicializacion
@@ -90,21 +89,21 @@ export const CalendarModal = () => {
     setErrorTitle(false);
 
     // Corregir este choclo mañana Urgente !
-    if (title.trim().length < 2) {
+    if (e.title.trim().length < 2) {
       return setErrorTitle(false);
     }
 
     if (activeEvent) {
       //Actualiza el evento
-      dispatch(eventStartUpdate(formValues));
+      dispatch(eventStartUpdate(e));
     } else {
       // Realiza la grabacion del evento
-      dispatch(eventStartAddNew(formValues));
+      dispatch(eventStartAddNew(e));
     }
     setErrorTitle(true);
     closeModal();
   };
-  
+
   // Cambia el valor de la fecha inicial seleccionada y del campo start
   const handleStartDateChange = (e: any) => {
     setStartDate(e);
@@ -142,7 +141,7 @@ export const CalendarModal = () => {
 
         <Formik
           initialValues={initalValue}
-          onSubmit={(values) => console.log(values)}
+          onSubmit={(values) => handleSubmitNewEvent(values)}
         >
           {(formik) => (
             <Form noValidate className="container">

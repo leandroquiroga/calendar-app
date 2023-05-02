@@ -46,7 +46,7 @@ export const authStartLogin = (
       { email, password },
       "POST"
     );
-    const body = await response.json();
+    const body = await response.data;
 
     // En caso de que haya un error en el login retorna el mensaje de error.
     if (!body.ok) return setMsgError(body.msg);
@@ -74,7 +74,7 @@ export const startRegister = (
       { email, password, name },
       "POST"
     );
-    const body = await response.json();
+    const body = await response.data;
 
     // En caso de que haya un error en el registro retornara un mensaje de error
     if (!body.ok) return setMsgError(body.msg);
@@ -94,8 +94,7 @@ export const startRegister = (
 export const startCheking = (): any => {
   return async (dispatch: AppDispatch) => {
     const response = await fetchWithToken("auth/renew", "GET");
-    const body = await response.json();
-
+    const body = await response.data;
     if (!body.ok) {
       // Cambia el checking a true y retorna un mensaje de error desde el backend
       return dispatch(checkingFinish());
