@@ -1,3 +1,5 @@
+import axios from "axios";
+
 type payloadUser = { 
   email: string;
   password: string;
@@ -15,47 +17,46 @@ const baseURL = process.env.REACT_APP_API_URL;
 
 // Realiza el POST, GET que NO requieran el token, si el metodo es GET retorna 
 // la peticion a la url, en cambio si es otro metodo retona la peticion con la data
-export const fetchNotToken = (
+export const fetchNotToken = async (
   endpoint: string,
   data: payloadEvent | payloadUser,
-  method: string
+  method = 'GET'
 ) => {
   const url = `${baseURL}/${endpoint}`;
-  if (method === "GET") return fetch(url);
-  return fetch(url, {
-    method,
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(data),
+  if (method === "GET") {
+    const response = await axios.get(url);
+    return response;
+  }
+
+  const response = await axios.post(url, data ,{
+    headers: { "Content-Type": "application/json" },
   });
+  return response
 };
 
 // Realiza el POST, GET que requieran el token, si el metodo es GET retorna 
 // la peticion a la url con los headers correspondiente,
 // en cambio si es otro metodo retona la peticion con la data
-export const fetchWithToken = (
+export const fetchWithToken = async (
   endpoint: string,
-  method?: string,
+  method = 'GET',
   data?: payloadEvent | payloadUser
 ) => {
-  const url = `${baseURL}/${endpoint}`;
-  const token = localStorage.getItem("token") || "";
+  try {
+    const url = `${baseURL}/${endpoint}`;
+    const token = localStorage.getItem("token") || "";
 
-  if (method === "GET")
-    return fetch(url, {
-      method,
-      headers: {
-        "x-token": token,
-      },
-    });
+    if (method === "GET") {
+      const response = await axios.get(url, { headers: { "x-token": token } });
+      return response;
+    }
+    
+    console.log(method === "GET")
+    const response = await axios.post(url, data, { headers: { "x-token": token } });
+    return response
 
-  return fetch(url, {
-    method,
-    headers: {
-      "Content-Type": "application/json",
-      "x-token": token,
-    },
-    body: JSON.stringify(data),
-  });
+  } catch (error:any) {
+    console.log(error)
+    throw new Error(error)
+  }
 };
