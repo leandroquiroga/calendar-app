@@ -16,17 +16,13 @@ type User = {
   name: string;
 };
 
-export const CalendarEvent = ( event : EventProps) => {
-
-  const { user, notes } = useSelector((state: RootState) => state.auth);
-  const { title } = event;
+export const CalendarEvent = ({ event }: EventProps<Event>) => {
+  const name = useSelector((state: RootState) => state.auth.name);
   return (
-    <article className='d-flex flex-column justify-content-center align-content-center flex-wrap'>
-      <span className='calendar_event__title'> {title} </span>
-      <span className='calendar_event__name'> -{user.name} </span>
-      {
-        (notes) && <small className='calendar_event__notes'>{notes}</small>
-      }
+    <article className="d-flex flex-column justify-content-center align-content-center flex-wrap">
+      <span className="calendar_event__title"> {event.title} </span>
+      <span className="calendar_event__name"> -{name} </span>
+      {event.notes && <small className="calendar_event__notes">{event.notes}</small>}
     </article>
-  )
+  );
 };
