@@ -1,5 +1,4 @@
 import { types } from "../types/types";
-
 interface CheckingAuth {
   checking: boolean
 }
@@ -10,13 +9,15 @@ const initialState: CheckingAuth = {
 
 export const authReducer = (state = initialState, action: any) => {
   
-  switch (action.type) {
+  const { payload, type } = action;
+
+  switch (type) {
     
     case types.authLogin:
       return {
         ...state,
         checking: false,
-        ...action.payload
+        ...payload,
       };
     
     case types.authChekingFinish:

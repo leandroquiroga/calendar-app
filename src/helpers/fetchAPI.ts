@@ -45,14 +45,12 @@ export const fetchWithToken = async (
   try {
     const url = `${baseURL}/${endpoint}`;
     const token = localStorage.getItem("token") || "";
-
     if (method === "GET") {
-      const response = await axios.get(url, { headers: { "x-token": token } });
+      const response = await axios.get(url, { headers: { "Authorization": token} });
       return response;
-    }
-    
-    console.log(method === "GET")
-    const response = await axios.post(url, data, { headers: { "x-token": token } });
+    };
+
+    const response = await axios.post(url, data, { headers: { "Authorization": token } });
     return response
 
   } catch (error:any) {

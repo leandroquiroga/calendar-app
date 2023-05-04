@@ -4,7 +4,8 @@ interface EventData {
   id: number;
   title: string;
   start: Date;
-  end: Date
+  end: Date;
+  notes: string
 }
 
 interface CalendarState {

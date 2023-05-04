@@ -46,7 +46,6 @@ const deleteEventNotes = () => ({ type: types.eventDeleteNotes });
 export const eventStartAddNew = (event: Event): any => {
   return async (dispatch: AppDispatch, getState: () => RootState) => {
     const { uid, name } = getState().auth;
-
     try {
       const response = await fetchWithToken("events", "POST", event);
       const body = await response.data;
@@ -79,7 +78,7 @@ export const eventStartLoading = (): any => {
       const body = await response.data;
       const preparedEvents = prepareEvents(body.event);
       const events = convertToEvent(preparedEvents);
-      dispatch(eventLoaded(events));
+      dispatch(eventLoaded(events)); 
     } catch (error) {
       console.log(error);
     }

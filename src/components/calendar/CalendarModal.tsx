@@ -38,6 +38,7 @@ export const CalendarModal = () => {
   const dispatch = useDispatch();
   const { modalOpen } = useSelector((state: RootState) => state.ui);
   const { activeEvent } = useSelector((state: RootState) => state.calendar);
+  // const state = useSelector((state: RootState) => state);
 
   // Mantiene el estado de la fecha inicial seleccionada
   const [startDate, setStartDate] = useState<Date>(nowDateStart.toDate());
@@ -48,18 +49,14 @@ export const CalendarModal = () => {
   const [errorTitle, setErrorTitle] = useState<boolean>(true);
 
   // Propiedades iniciales del formulario
-  const [formValues, setFormValues] = useState<CalendarInitialValue>(initalValue);
+  const [formValues, setFormValues] = useState<CalendarInitialValue>(initalValue || activeEvent);
   // const { title, start, end } = formValues;
 
   // Al abrir el modal,
   // si exite el activeEvent coloca los valores al formulario
   // sino reinicia al estado inicial el formulario
   useEffect(() => {
-    if (activeEvent) {
-      setFormValues(activeEvent);
-    } else {
-      setFormValues(initalValue)
-    }
+    activeEvent ? setFormValues(activeEvent) : setFormValues(initalValue);
   }, [activeEvent]);
 
   useEffect(() => {
@@ -75,7 +72,6 @@ export const CalendarModal = () => {
   }
 
   const handleSubmitNewEvent = (e: CalendarInitialValue) => {
-
     // Variables de las fechas inicio y fin
     const momentStart = moment(e.start);
     const momentEnd = moment(e.end);
@@ -87,19 +83,12 @@ export const CalendarModal = () => {
     }
 
     setErrorTitle(false);
-
     // Corregir este choclo mañana Urgente !
     if (e.title.trim().length < 2) {
       return setErrorTitle(false);
     }
-
-    if (activeEvent) {
-      //Actualiza el evento
-      dispatch(eventStartUpdate(e));
-    } else {
-      // Realiza la grabacion del evento
-      dispatch(eventStartAddNew(e));
-    }
+    //Actualiza el evento o realiza la grabacion del evento
+    activeEvent ? dispatch(eventStartUpdate(e)) : dispatch(eventStartAddNew(e));
     setErrorTitle(true);
     closeModal();
   };
@@ -140,7 +129,7 @@ export const CalendarModal = () => {
         <hr />
 
         <Formik
-          initialValues={initalValue}
+          initialValues={formValues}
           onSubmit={(values) => handleSubmitNewEvent(values)}
         >
           {(formik) => (
