@@ -6,8 +6,8 @@ import { useSelector } from 'react-redux';
 export interface Event {
   title: string;
   notes: string;
-  end: Date;
-  start: Date;
+  end: string;
+  start: string;
   id?: string;
   user: User;
 }
