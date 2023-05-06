@@ -9,8 +9,8 @@ type payloadUser = {
 type payloadEvent = {
   title: string;
   notes: string;
-  end: Date;
-  start: Date;
+  end: string;
+  start: string;
 };
 
 const baseURL = process.env.REACT_APP_API_URL;
@@ -49,6 +49,17 @@ export const fetchWithToken = async (
       const response = await axios.get(url, { headers: { "Authorization": token} });
       return response;
     };
+
+    if (method === "DELETE") {
+      const response = await axios.delete(url, { headers: { "Authorization": token } });
+      return response;
+    };
+
+    if (method === "PUT") {
+      const response = await axios.put(url, data, { headers: { Authorization: token }});
+      console.log(response)
+      return response;
+    }
 
     const response = await axios.post(url, data, { headers: { "Authorization": token } });
     return response

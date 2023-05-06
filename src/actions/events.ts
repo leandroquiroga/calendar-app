@@ -7,8 +7,8 @@ import { prepareEvents } from '../helpers/prepareEvents';
 export interface Event {
   title: string;
   notes: string;
-  end: Date;
-  start: Date;
+  end: string;
+  start: string;
   id?: string
   user?: User;
 }
@@ -93,7 +93,6 @@ export const eventStartUpdate = (event: Event): any => {
 
       if (body.ok) return dispatch(updatedEvent(event));
 
-      console.log(body.msg);
     } catch (error) {
       console.log(error);
     }
@@ -111,7 +110,6 @@ export const eventStartDelete = (): any => {
 
       if (body.ok) return dispatch(deleteEventNotes());
 
-      console.log(body.msg);
     } catch (error) {
       console.log(error);
     }
