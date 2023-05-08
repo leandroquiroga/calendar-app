@@ -9,8 +9,8 @@ type payloadUser = {
 type payloadEvent = {
   title: string;
   notes: string;
-  end: string;
-  start: string;
+  end: Date;
+  start: Date;
 };
 
 const baseURL = process.env.REACT_APP_API_URL;
@@ -39,7 +39,7 @@ export const fetchNotToken = async (
 // en cambio si es otro metodo retona la peticion con la data
 export const fetchWithToken = async (
   endpoint: string,
-  method = 'GET',
+  method: string,
   data?: payloadEvent | payloadUser
 ) => {
   try {
@@ -57,7 +57,6 @@ export const fetchWithToken = async (
 
     if (method === "PUT") {
       const response = await axios.put(url, data, { headers: { Authorization: token }});
-      console.log(response)
       return response;
     }
 

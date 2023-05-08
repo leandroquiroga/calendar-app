@@ -1,11 +1,3 @@
-export interface Event {
-  title: string;
-  notes: string;
-  end: string;
-  start: string;
-  id?: string;
-  user?: User;
-}
 export interface PrepareEvent {
   end: string;
   start: string;
@@ -20,12 +12,12 @@ type User = {
   name: string;
 };
 
-export const convertToEvent = (preparedEvent: PrepareEvent[]): Event[] => {
+export const convertToEvent = (preparedEvent: PrepareEvent[]) => {
   return preparedEvent.map((event) => ({
     ...event,
     title: event.title || "",
     notes: event.notes || "",
-    end: event.end.toString(),
-    start: event.start.toString(),
+    end: new Date(event.end),
+    start: new Date(event.start),
   }));
 };

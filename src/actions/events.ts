@@ -1,21 +1,23 @@
+import Swal from 'sweetalert2';
 import { types } from '../types/types';
 import { fetchWithToken } from '../helpers/fetchAPI';
 import { AppDispatch, RootState } from '../store/store';
 import { convertToEvent } from '../helpers/convertToEvents';
 import { prepareEvents } from '../helpers/prepareEvents';
+import { transfromBody } from '../helpers/transfromBody';
 
 export interface Event {
   title: string;
   notes: string;
-  end: string;
-  start: string;
+  end: Date;
+  start: Date;
   id?: string
   user?: User;
 }
 
 export interface PreparedEvent {
-  end: string;
-  start: string;
+  end: Date;
+  start: Date;
   title: string;
   notes: string;
   id?: string;
@@ -74,9 +76,11 @@ export const clearEventActive = () => ({ type: types.clearActiveEvent });
 export const eventStartLoading = (): any => {
   return async (dispatch: AppDispatch) => {
     try {
-      const response = await fetchWithToken("events");
+      const response = await fetchWithToken("events", "GET");
       const body = await response.data;
-      const preparedEvents = prepareEvents(body.event);
+      const bodyConvertDates = transfromBody(body.event);
+      // Revisar el problema de los types de redux ya que no me serializa el objeto con las propiedades end y start
+      const preparedEvents = prepareEvents(bodyConvertDates);
       const events = convertToEvent(preparedEvents);
       dispatch(eventLoaded(events)); 
     } catch (error) {
@@ -91,7 +95,15 @@ export const eventStartUpdate = (event: Event): any => {
       const response = await fetchWithToken(`events/${event.id}`, "PUT", event);
       const body = await response.data;
 
-      if (body.ok) return dispatch(updatedEvent(event));
+      if (body.ok) {
+        dispatch(updatedEvent(event));
+        Swal.fire({
+          title: 'Excelente!',
+          text: `${body.msg}`,
+          icon: 'success'
+        });
+        return
+      };
 
     } catch (error) {
       console.log(error);

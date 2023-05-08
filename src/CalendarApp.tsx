@@ -45,7 +45,6 @@ export const CalendarApp = () => {
   // Evento de cambio de vista
   const handleOnViewChange = (e: View) => {
     setLastView(e);
-    console.log(e)
     localStorage.setItem("lastView", e);
   };
 
