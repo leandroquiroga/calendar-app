@@ -71,6 +71,7 @@ export const CalendarApp = () => {
     <section className='calendar_container'>
       <Navbar />
       <Calendar
+        popup={true}
         localizer={localizer}
         events={events}
         messages={messages_es}

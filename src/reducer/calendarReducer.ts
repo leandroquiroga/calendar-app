@@ -5,7 +5,7 @@ interface EventData {
   title: string;
   start: Date;
   end: Date;
-  notes: string
+  notes: string;
 }
 
 interface CalendarState {

@@ -9,15 +9,15 @@ import { transfromBody } from '../helpers/transfromBody';
 export interface Event {
   title: string;
   notes: string;
-  end: Date;
-  start: Date;
+  end: Date | string;
+  start: Date | string;
   id?: string
   user?: User;
 }
 
 export interface PreparedEvent {
-  end: Date;
-  start: Date;
+  end: Date | string;
+  start: Date | string;
   title: string;
   notes: string;
   id?: string;
@@ -28,17 +28,17 @@ type User = {
   uid: string;
   name: string;
 }
-const eventAddNew = (event: Event) => ({
+const eventAddNew = (event: any) => ({
   type: types.eventAddNew, 
   payload: event,
 });
 
-const eventLoaded = (event: PreparedEvent[]) => ({
+const eventLoaded = (event: any[]) => ({
   type: types.eventLoaded,
   payload: event,
 });
 
-const updatedEvent = (event: Event) => ({
+const updatedEvent = (event: any) => ({
   type: types.eventUpdateNotes,
   payload: event
 });
@@ -78,11 +78,13 @@ export const eventStartLoading = (): any => {
     try {
       const response = await fetchWithToken("events", "GET");
       const body = await response.data;
-      const bodyConvertDates = transfromBody(body.event);
+      // const bodyConvertDates = transfromBody(body.event);
       // Revisar el problema de los types de redux ya que no me serializa el objeto con las propiedades end y start
-      const preparedEvents = prepareEvents(bodyConvertDates);
-      const events = convertToEvent(preparedEvents);
-      dispatch(eventLoaded(events)); 
+      const preparedEvents = prepareEvents(body.event);
+      // const events = convertToEvent(preparedEvents);
+      console.log(preparedEvents);
+      // console.log(events);
+      dispatch(eventLoaded(preparedEvents)); 
     } catch (error) {
       console.log(error);
     }
