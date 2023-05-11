@@ -6,15 +6,15 @@ import { AppDispatch, RootState } from '../store/store';
 export interface Event {
   title: string;
   notes: string;
-  end: string;
-  start: string;
+  end: Date | string;
+  start: Date | string;
   id?: string
   user?: User;
 }
 
 export interface PreparedEvent {
-  end: string;
-  start: string;
+  end: Date | string;
+  start: Date | string;
   title: string;
   notes: string;
   id?: string;

@@ -9,8 +9,8 @@ type payloadUser = {
 type payloadEvent = {
   title: string;
   notes: string;
-  end: string;
-  start: string;
+  end: Date | string;
+  start: Date | string;
 };
 
 const baseURL = process.env.REACT_APP_API_URL;
