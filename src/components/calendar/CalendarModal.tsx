@@ -22,16 +22,16 @@ const nowDateEnd = nowDateStart.clone().add(1, 'hours');
 export interface CalendarInitialValue {
   title: string ;
   notes: string ;
-  end: string ;
-  start: string ;
+  end: string;
+  start: string;
 };
 
 // Valor inicial del formulario
 const initalValue: CalendarInitialValue = {
   title: "",
   notes: "",
-  end: nowDateEnd.toDate().toISOString(),
-  start: nowDateStart.toDate().toISOString(),
+  end: nowDateEnd.toISOString(),
+  start: nowDateStart.toISOString(),
 };
 export const CalendarModal = () => {
 
@@ -50,7 +50,6 @@ export const CalendarModal = () => {
 
   // Propiedades iniciales del formulario
   const [formValues, setFormValues] = useState<CalendarInitialValue>(initalValue || activeEvent);
-  // const { title, start, end } = formValues;
 
   // Al abrir el modal,
   // si exite el activeEvent coloca los valores al formulario

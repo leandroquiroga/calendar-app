@@ -2,22 +2,19 @@ import Swal from 'sweetalert2';
 import { types } from '../types/types';
 import { fetchWithToken } from '../helpers/fetchAPI';
 import { AppDispatch, RootState } from '../store/store';
-import { convertToEvent } from '../helpers/convertToEvents';
-import { prepareEvents } from '../helpers/prepareEvents';
-import { transfromBody } from '../helpers/transfromBody';
 
 export interface Event {
   title: string;
   notes: string;
-  end: Date | string;
-  start: Date | string;
+  end: string;
+  start: string;
   id?: string
   user?: User;
 }
 
 export interface PreparedEvent {
-  end: Date | string;
-  start: Date | string;
+  end: string;
+  start: string;
   title: string;
   notes: string;
   id?: string;
@@ -51,7 +48,7 @@ export const eventStartAddNew = (event: Event): any => {
     try {
       const response = await fetchWithToken("events", "POST", event);
       const body = await response.data;
-
+      
       if (body.ok) {
         event.id = body.event.id;
         event.user = {
@@ -78,13 +75,7 @@ export const eventStartLoading = (): any => {
     try {
       const response = await fetchWithToken("events", "GET");
       const body = await response.data;
-      // const bodyConvertDates = transfromBody(body.event);
-      // Revisar el problema de los types de redux ya que no me serializa el objeto con las propiedades end y start
-      const preparedEvents = prepareEvents(body.event);
-      // const events = convertToEvent(preparedEvents);
-      console.log(preparedEvents);
-      // console.log(events);
-      dispatch(eventLoaded(preparedEvents)); 
+      dispatch(eventLoaded(body.event)); 
     } catch (error) {
       console.log(error);
     }
