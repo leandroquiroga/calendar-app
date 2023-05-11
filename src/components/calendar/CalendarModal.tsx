@@ -3,6 +3,7 @@ import { customStylesModal } from '../../helpers/customStylesModal';
 
 import Modal from 'react-modal';
 import moment from 'moment';
+// import { startOfDay, addHours, addMinutes } from 'date-fns';
 import { useDispatch, useSelector } from 'react-redux';
 import { uiCloseModal } from '../../actions/actions';
 import { clearEventActive, eventStartAddNew, eventStartLoading, eventStartUpdate } from '../../actions/events';
@@ -13,25 +14,39 @@ import { Input } from '../form/Input';
 import { TextArea } from '../form/TextArea';
 import { Button } from '../form/Button';
 
+import { startOfHour, addHours } from "date-fns";
+
+
 // Obtenemos el id #root para el modal
 (process.env.NODE_ENV !== 'test') && Modal.setAppElement('#root');
 // Valor inicial de la fecha
-const nowDateStart = moment().minutes(0).seconds(0).add(1, 'hours');
+// const nowDateStart = moment().minutes(0).seconds(0).add(1, 'hours');
+// // Valor final de la fecha
+// const nowDateEnd = nowDateStart.clone().add(1, 'hours');
+
+// Valor inicial de la fecha
+let nowDateStart = startOfHour(new Date());
+// Agregar una hora
+nowDateStart = addHours(nowDateStart, 1);
+
 // Valor final de la fecha
-const nowDateEnd = nowDateStart.clone().add(1, 'hours');
+const nowDateEnd = addHours(nowDateStart, 1);
+
+console.log(nowDateStart.toISOString());
+console.log(nowDateEnd.toUTCString());
 export interface CalendarInitialValue {
   title: string ;
   notes: string ;
-  end: string ;
-  start: string ;
+  end: Date | string;
+  start: Date | string;
 };
 
 // Valor inicial del formulario
 const initalValue: CalendarInitialValue = {
   title: "",
   notes: "",
-  end: nowDateEnd.toDate().toISOString(),
-  start: nowDateStart.toDate().toISOString(),
+  end: nowDateEnd.toUTCString(),
+  start: nowDateStart.toUTCString(),
 };
 export const CalendarModal = () => {
 
@@ -41,16 +56,15 @@ export const CalendarModal = () => {
   // const state = useSelector((state: RootState) => state);
 
   // Mantiene el estado de la fecha inicial seleccionada
-  const [startDate, setStartDate] = useState<Date>(nowDateStart.toDate());
+  const [startDate, setStartDate] = useState<Date>(nowDateStart);
   const [errorMsgDate, setErrorMsgDate] = useState<boolean>(false)
 
   // Mantiene el estado de la fecha final seleccionada
-  const [endDate, setEndDate] = useState<Date>(nowDateEnd.toDate());
+  const [endDate, setEndDate] = useState<Date>(nowDateEnd);
   const [errorTitle, setErrorTitle] = useState<boolean>(true);
 
   // Propiedades iniciales del formulario
   const [formValues, setFormValues] = useState<CalendarInitialValue>(initalValue || activeEvent);
-  // const { title, start, end } = formValues;
 
   // Al abrir el modal,
   // si exite el activeEvent coloca los valores al formulario

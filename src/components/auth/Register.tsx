@@ -1,10 +1,13 @@
-import React, { ChangeEvent, useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import { Link } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 
-import { useForm } from '../../hooks/useForm';
 import logoRegister from '../../assets/register.svg'
 import { startRegister } from '../../actions/auth';
+import { AnyAction, Dispatch } from 'redux';
+import { Form, Formik } from 'formik';
+import { Input } from '../form/Input';
+import { Button } from '../form/Button';
 
 export interface ValueRegister {
   name: string;
@@ -14,25 +17,22 @@ export interface ValueRegister {
 }
 
 const valueRegister: ValueRegister = {
-    name: '',
-    email: '',
-    password: '',
-    passwordConfirm: '',
-}
+  name: "",
+  email: "",
+  password: "",
+  passwordConfirm: "",
+};
 
 export const Register = () => {
 
-  const dispatch = useDispatch();
-  const [buttonDisabled, setButtonDisabled] = useState<boolean>(false);
+  const dispatch = useDispatch<Dispatch<AnyAction>>();
   const [msgError, setMsgError] = useState<string>('');
 
   
-  const [value, handleChange] = useForm<ValueRegister>(valueRegister);
+  const handleSubmit = ( values: ValueRegister) => {
+    // e.preventDefault();
 
-  const { email, password, name, passwordConfirm } = value;
-
-  const handleSubmit = (e: ChangeEvent<HTMLInputElement>) => {
-    e.preventDefault();
+    const { email, name, password, passwordConfirm } = values;
 
     if (password !== passwordConfirm) {
       return setMsgError("Las contraseñas deben ser iguales");
@@ -40,135 +40,87 @@ export const Register = () => {
     dispatch(startRegister(email, password, name, setMsgError));
   };
 
-  useEffect(() => {
-    if ([email, password, name, passwordConfirm].includes('')) {
-      setButtonDisabled(true);
-      return
-    };
-
-    setButtonDisabled(false)
-  }, [email, password, name, passwordConfirm, buttonDisabled])
   return (
     <section
-      className='row p-0 m-0'
-      style={{ height: 100 + 'vh', width: 100 + '%' }}
+      className="row p-0 m-0"
+      style={{ height: 100 + "vh", width: 100 + "%" }}
     >
-      <article className='col-md-6 d-flex flex-column justify-content-center align-items-center'>
-        <div className='border rounded-circle overflow-hidden shadow-sm p-3'>
+      <article className="col-md-6 d-flex flex-column justify-content-center align-items-center">
+        <div className="border rounded-circle overflow-hidden shadow-sm p-3">
           <img
-            className='img-fluid'
-            style={{ width: 250 + 'px', height: 250 + 'px' }}
+            className="img-fluid"
+            style={{ width: 250 + "px", height: 250 + "px" }}
             src={logoRegister}
-            alt='register'
+            alt="register"
           />
         </div>
 
-        <div className='text-center p-2 mt-3'>
-          <p className='fs-5 fw-bold'> !Bienvenido a Calendar! </p>
-          <small className='fw-normal fs-6'> Registrate para crear tu agenda web. </small>
+        <div className="text-center p-2 mt-3">
+          <p className="fs-5 fw-bold"> !Bienvenido a Calendar! </p>
+          <small className="fw-normal fs-6">
+            {" "}
+            Registrate para crear tu agenda web.{" "}
+          </small>
           <hr />
-          <span className='m-0'>
-            ¿Tienes cuenta? Haz click en {''}
-            <Link
-              to='/login'
-              className='text-decoration-none'
-            >
+          <span className="m-0">
+            ¿Tienes cuenta? Haz click en {""}
+            <Link to="/login" className="text-decoration-none">
               Inicia sesión
             </Link>
           </span>
         </div>
-
       </article>
-      <article className='col-md-6 bg-primary d-flex flex-column justify-content-center align-items-center'>
-        <h1 className='text-white fs-3 p-4'> Registrarte </h1>
-        <form
-          className='form-control my-5 form_container bg-white border-0 rounded p-3'
-          onSubmit={(e) => handleSubmit}
+      <article className="col-md-6 bg-primary d-flex flex-column justify-content-center align-items-center">
+        <h1 className="text-white fs-3 p-4"> Registrarte </h1>
+        <Formik
+          initialValues={valueRegister}
+          onSubmit={(values) => handleSubmit(values)}
         >
-          <div className='mb-3 d-flex flex-column'>
-            <label
-              htmlFor='name'
-              className='fw-normal form-label'
+          {(formik) => (
+            <Form
+              noValidate
+              className="form-control my-5 form_container bg-white border-0 rounded p-3"
             >
-              Nombre
-            </label>
-            <input
-              className='border-0 border-bottom form_container__field'
-              id='name'
-              placeholder='Ingrese su nombre...'
-              type='text'
-              name='name'
-              value={name}
-              onChange={(e) => handleChange}
-            />
-          </div>
-          <div className='mb-3 d-flex flex-column'>
-            <label
-              htmlFor='email'
-              className='fw-normal form-label'
-            >
-              Correo electronico:
-            </label>
-            <input
-              className='border-0 border-bottom form_container__field'
-              id='email'
-              placeholder='Ingrese su email...'
-              type='email'
-              name='email'
-              value={email}
-              onChange={(e) => handleChange}
-            />
-          </div>
-          <div className='mb-3 d-flex flex-column'>
-            <label
-              htmlFor='password'
-              className='fw-normal form-label'
-            >
-              Contraseña:
-            </label>
-            <input
-              className='border-0 border-bottom form_container__field'
-              id='password'
-              placeholder='Ingrese su contraseña...'
-              type='password'
-              name='password'
-              value={password}
-              onChange={(e) => handleChange}
-            />
-          </div>
-          <div className='mb-3 d-flex flex-column'>
-            <label
-              htmlFor='passwordConfirm'
-              className='fw-normal form-label'
-            >
-              Repetir contraseña:
-            </label>
-            <input
-              className='border-0 border-bottom form_container__field'
-              id='passwordConfirm'
-              placeholder='Repita su contraseña...'
-              type='password'
-              name='passwordConfirm'
-              value={passwordConfirm}
-              onChange={(e) => handleChange}
-            />
-          </div>
-
-          <button
-            type='submit'
-            disabled={buttonDisabled}
-            className={
-              (buttonDisabled)
-                ? 'btn btn-primary rounded p-2 form_container__button form_container__button-disabled'
-                : 'btn btn-primary rounded p-2 form_container__button'}
-          >
-            Registrarme
-          </button>
-          {
-            (msgError !== '') && <p className='text-center mt-2 text-danger fs-6'>{msgError}</p>
-          }
-        </form>
+              <Input
+                label="Name"
+                name="text"
+                type="text"
+                styles="border-0 border-bottom form_container__field"
+                placeholder="Ingrese su nombre"
+              />
+              <Input
+                label="Email"
+                name="email"
+                type="email"
+                styles="border-0 border-bottom form_container__field"
+                placeholder="Ingrese su correo electronico"
+              />
+              <Input
+                label="Contraseña"
+                name="password"
+                type="password"
+                styles="border-0 border-bottom form_container__field"
+                placeholder="Ingrese su contraseña"
+              />
+              <Input
+                label="Contraseña"
+                name="passwordConfirm"
+                type="password"
+                styles="border-0 border-bottom form_container__field"
+                placeholder="Confirme su contraseña"
+              />
+              <Button
+                type="submit"
+                styles="btn btn-primary rounded p-2 form_container__button"
+                value="Registrarse"
+              />
+              {msgError !== "" && (
+                <p className="text-center mt-2 text-danger fs-6">{msgError}</p>
+              )}
+            </Form>
+          )}
+        </Formik>
       </article>
     </section>
-  )
+  );
 };

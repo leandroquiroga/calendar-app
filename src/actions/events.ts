@@ -1,21 +1,20 @@
+import Swal from 'sweetalert2';
 import { types } from '../types/types';
 import { fetchWithToken } from '../helpers/fetchAPI';
 import { AppDispatch, RootState } from '../store/store';
-import { convertToEvent } from '../helpers/convertToEvents';
-import { prepareEvents } from '../helpers/prepareEvents';
 
 export interface Event {
   title: string;
   notes: string;
-  end: string;
-  start: string;
+  end: Date | string;
+  start: Date | string;
   id?: string
   user?: User;
 }
 
 export interface PreparedEvent {
-  end: string;
-  start: string;
+  end: Date | string;
+  start: Date | string;
   title: string;
   notes: string;
   id?: string;
@@ -26,17 +25,17 @@ type User = {
   uid: string;
   name: string;
 }
-const eventAddNew = (event: Event) => ({
+const eventAddNew = (event: any) => ({
   type: types.eventAddNew, 
   payload: event,
 });
 
-const eventLoaded = (event: PreparedEvent[]) => ({
+const eventLoaded = (event: any[]) => ({
   type: types.eventLoaded,
   payload: event,
 });
 
-const updatedEvent = (event: Event) => ({
+const updatedEvent = (event: any) => ({
   type: types.eventUpdateNotes,
   payload: event
 });
@@ -49,7 +48,7 @@ export const eventStartAddNew = (event: Event): any => {
     try {
       const response = await fetchWithToken("events", "POST", event);
       const body = await response.data;
-
+      
       if (body.ok) {
         event.id = body.event.id;
         event.user = {
@@ -74,11 +73,9 @@ export const clearEventActive = () => ({ type: types.clearActiveEvent });
 export const eventStartLoading = (): any => {
   return async (dispatch: AppDispatch) => {
     try {
-      const response = await fetchWithToken("events");
+      const response = await fetchWithToken("events", "GET");
       const body = await response.data;
-      const preparedEvents = prepareEvents(body.event);
-      const events = convertToEvent(preparedEvents);
-      dispatch(eventLoaded(events)); 
+      dispatch(eventLoaded(body.event)); 
     } catch (error) {
       console.log(error);
     }
@@ -91,7 +88,15 @@ export const eventStartUpdate = (event: Event): any => {
       const response = await fetchWithToken(`events/${event.id}`, "PUT", event);
       const body = await response.data;
 
-      if (body.ok) return dispatch(updatedEvent(event));
+      if (body.ok) {
+        dispatch(updatedEvent(event));
+        Swal.fire({
+          title: 'Excelente!',
+          text: `${body.msg}`,
+          icon: 'success'
+        });
+        return
+      };
 
     } catch (error) {
       console.log(error);

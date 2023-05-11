@@ -1,3 +1,4 @@
+// import moment from 'moment';
 import { types } from '../types/types';
 
 interface EventData {
@@ -5,7 +6,7 @@ interface EventData {
   title: string;
   start: Date;
   end: Date;
-  notes: string
+  notes: string;
 }
 
 interface CalendarState {
@@ -19,21 +20,29 @@ const initialState: CalendarState = {
 };
 
 export const calendarReducer = (state = initialState, action: any) => {
-  
+  // let data: any | any[];
+
   switch (action.type) {
     case types.eventSetActive:
+      // data = {
+      //   ...action.payload,
+      //   start: moment(action.payload.start).toDate(),
+      //   end: moment(action.payload.end).toDate(),
+      // };
       return {
         ...state,
         activeEvent: action.payload
       }
     case types.eventAddNew:
+      // data = {
+      //   ...action.payload,
+      //   start: moment(action.payload.start).toDate(),
+      //   end: moment(action.payload.end).toDate(),
+      // };
       return {
         ...state,
-        events: [
-          ...state.events,
-          action.payload
-        ]
-      }
+        events: [...state.events, action.payload],
+      };
     
     case types.clearActiveEvent:
       return {
@@ -41,11 +50,16 @@ export const calendarReducer = (state = initialState, action: any) => {
         activeEvent: null
       }
     case types.eventUpdateNotes:
+      // data = {
+      //   ...action.payload,
+      //   start: moment(action.payload.start).toDate(),
+      //   end: moment(action.payload.end).toDate(),
+      // };
       return {
         ...state,
-        events: state.events.map(
-          e => (e.id === action.payload.id) ? action.payload : e
-        )
+        events: state.events.map((e) =>
+          e.id === action.payload.id ? action.payload : e
+        ),
       };
     
     case types.eventDeleteNotes:
@@ -58,6 +72,16 @@ export const calendarReducer = (state = initialState, action: any) => {
       };
     
     case types.eventLoaded:
+      // console.log(action.payload);
+      // data = action.payload.map((e: EventData) => {
+      //   return {
+      //     ...e,
+      //     start: moment(e.start).toISOString(),
+      //     end: moment(e.end).toISOString(),
+      //   }
+      // });
+      // console.log(data);
+
       return {
         ...state,
         events: [...action.payload],

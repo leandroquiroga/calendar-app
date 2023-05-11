@@ -45,7 +45,6 @@ export const CalendarApp = () => {
   // Evento de cambio de vista
   const handleOnViewChange = (e: View) => {
     setLastView(e);
-    console.log(e)
     localStorage.setItem("lastView", e);
   };
 
@@ -72,6 +71,7 @@ export const CalendarApp = () => {
     <section className='calendar_container'>
       <Navbar />
       <Calendar
+        popup={true}
         localizer={localizer}
         events={events}
         messages={messages_es}
