@@ -30,18 +30,18 @@ export let storeModal = mockStore({
     modalOpen: true
   }
 })
-export let storeAppRouter = mockStore({    
+export let storeAppRouter= mockStore({
   auth: {
     checking: true,
-    uid: null
+    uid: null,
   },
   calendar: {
     event: [],
-    activeEvent: null
+    activeEvent: null,
   },
   ui: {
-    modalOpen: false
-  }
+    modalOpen: false,
+  },
 });
 
 export let storeAuth = mockStore({

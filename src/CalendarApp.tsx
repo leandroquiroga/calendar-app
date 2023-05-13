@@ -23,7 +23,7 @@ moment.locale('es')
 // Configuracion del localizer
 const localizer = momentLocalizer(moment);
 
-export const CalendarApp = () => {
+export const CalendarApp: React.FC = () => {
 
   const dispatch = useDispatch();
   const { events, activeEvent } = useSelector((state: RootState) => state.calendar);
